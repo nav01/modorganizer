@@ -13,7 +13,7 @@ class FilterList : public QObject
   Q_OBJECT;
 
 public:
-  FilterList(Ui::MainWindow* ui, CategoryFactory& factory);
+  FilterList(Ui::MainWindow* ui, CategoryFactory *factory);
 
   void restoreState(const Settings& s);
   void saveState(Settings& s) const;
@@ -31,7 +31,7 @@ private:
   class CriteriaItem;
 
   Ui::MainWindow* ui;
-  CategoryFactory& m_factory;
+  CategoryFactory* m_factory;
 
   bool onClick(QMouseEvent* e);
   void onItemActivated(QTreeWidgetItem* item);
