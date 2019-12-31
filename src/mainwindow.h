@@ -171,6 +171,8 @@ public slots:
   void toolPluginInvoke();
   void modPagePluginInvoke();
 
+  void requestNexusCategories();
+
 signals:
 
   /**
