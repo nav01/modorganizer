@@ -95,6 +95,7 @@ SET(organizer_SRCS
     credentialsdialog.cpp
     categoriesdialog.cpp
     categories.cpp
+    categoriestable.cpp
     bbcode.cpp
     activatemodsdialog.cpp
     moapplication.cpp
@@ -220,6 +221,7 @@ SET(organizer_HDRS
     credentialsdialog.h
     categoriesdialog.h
     categories.h
+    categoriestable.h
     bbcode.h
     activatemodsdialog.h
     moapplication.h
@@ -343,6 +345,7 @@ set(browser
 
 set(core
 	categories
+    categoriestable
 	shared/directoryentry
 	directoryrefresher
 	installationmanager
