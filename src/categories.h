@@ -44,6 +44,7 @@ public:
     UpdateAvailable,
     HasCategory,
     Conflict,
+    HasHiddenFiles,
     Endorsed,
     Backup,
     Managed,

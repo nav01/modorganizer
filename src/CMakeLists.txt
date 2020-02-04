@@ -123,13 +123,11 @@ SET(organizer_SRCS
     organizercore.cpp
     instancemanager.cpp
     usvfsconnector.cpp
-    eventfilter.cpp
     moshortcut.cpp
     listdialog.cpp
     lcdnumber.cpp
     forcedloaddialog.cpp
     forcedloaddialogwidget.cpp
-	filterwidget.cpp
 	statusbar.cpp
 	apiuseraccount.cpp
 	filerenamer.cpp
@@ -250,13 +248,11 @@ SET(organizer_HDRS
     iuserinterface.h
     instancemanager.h
     usvfsconnector.h
-    eventfilter.h
     moshortcut.h
     listdialog.h
     lcdnumber.h
     forcedloaddialog.h
     forcedloaddialogwidget.h
-	filterwidget.h
 	statusbar.h
 	apiuseraccount.h
 	filerenamer.h
@@ -474,7 +470,6 @@ set(utilities
 	bbcode
 	csvbuilder
 	shared/error_report
-	eventfilter
 	shared/leaktrace
 	persistentcookiejar
 	serverinfo
@@ -490,7 +485,6 @@ set(widgets
 	colortable
 	genericicondelegate
 	filerenamer
-	filterwidget
 	icondelegate
 	lcdnumber
 	loglist

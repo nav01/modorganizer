@@ -162,6 +162,7 @@ QString ModList::getFlagText(ModInfo::EFlag flag, ModInfo::Ptr modInfo) const
     case ModInfo::FLAG_ALTERNATE_GAME: return tr("<br>This mod is for a different game, "
       "make sure it's compatible or it could cause crashes.");
     case ModInfo::FLAG_TRACKED: return tr("Mod is being tracked on the website");
+    case ModInfo::FLAG_HIDDEN_FILES: return tr("Contains hidden files");
     default: return "";
   }
 }
@@ -1057,7 +1058,7 @@ bool ModList::dropURLs(const QMimeData *mimeData, int row, const QModelIndex &pa
       continue;
     }
 
-    QFileInfo targetInfo(modDir.absoluteFilePath(sourceInfo.fileName()));
+    QFileInfo targetInfo(modDir.absoluteFilePath(relativePath));
     sourceList << sourceFile;
     targetList << targetInfo.absoluteFilePath();
     relativePathList << QPair<QString,QString>(relativePath, originName);
@@ -1315,7 +1316,7 @@ QString ModList::getColumnToolTip(int column)
     case COL_VERSION:  return tr("Version of the mod (if available)");
     case COL_PRIORITY: return tr("Installation priority of your mod. The higher, the more \"important\" it is and thus "
                                  "overwrites files from mods with lower priority.");
-    case COL_CATEGORY: return tr("Category of the mod.");
+    case COL_CATEGORY: return tr("Primary category of the mod.");
     case COL_GAME:     return tr("The source game which was the origin of this mod.");
     case COL_MODID:    return tr("Id of the mod as used on Nexus.");
     case COL_CONFLICTFLAGS: return tr("Indicators of file conflicts between mods.");

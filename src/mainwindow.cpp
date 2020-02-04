@@ -1745,7 +1745,7 @@ void MainWindow::updateTo(QTreeWidgetItem *subTree, const std::wstring &director
         font.setItalic(true);
         fileChild->setFont(0, font);
         fileChild->setFont(1, font);
-      } else if (fileName.endsWith(ModInfo::s_HiddenExt)) {
+      } else if (fileName.endsWith(ModInfo::s_HiddenExt, Qt::CaseInsensitive)) {
         QFont font = fileChild->font(0);
         font.setStrikeOut(true);
         fileChild->setFont(0, font);
@@ -3203,6 +3203,99 @@ void MainWindow::markConverted_clicked()
 }
 
 
+void MainWindow::restoreHiddenFiles_clicked()
+{
+  const int max_items = 20;
+  QItemSelectionModel* selection = ui->modList->selectionModel();
+
+  QFlags<FileRenamer::RenameFlags> flags = FileRenamer::UNHIDE;
+  flags |= FileRenamer::MULTIPLE;
+
+  FileRenamer renamer(this, flags);
+
+  FileRenamer::RenameResults result = FileRenamer::RESULT_OK;
+
+  // multi selection
+  if (selection->hasSelection() && selection->selectedRows().count() > 1) {
+    QString mods;
+    QStringList modNames;
+    int i = 0;
+
+    for (QModelIndex idx : selection->selectedRows()) {
+
+      QString name = idx.data().toString();
+      int row_idx = idx.data(Qt::UserRole + 1).toInt();
+      ModInfo::Ptr modInfo = ModInfo::getByIndex(row_idx);
+      const auto flags = modInfo->getFlags();
+
+      if (!modInfo->isRegular() ||
+          std::find(flags.begin(), flags.end(), ModInfo::FLAG_HIDDEN_FILES) == flags.end()) {
+        continue;
+      }
+
+      // adds an item for the mod name until `i` reaches `max_items`, which
+      // adds one "..." item; subsequent mods are not shown on the list but
+      // are still added to `modNames` below so they can be removed correctly
+      if (i < max_items) {
+        mods += "<li>" + name + "</li>";
+      }
+      else if (i == max_items) {
+        mods += "<li>...</li>";
+      }
+
+      modNames.append(ModInfo::getByIndex(idx.data(Qt::UserRole + 1).toInt())->name());
+      ++i;
+    }
+    if (QMessageBox::question(this, tr("Confirm"),
+        tr("Restore all hidden files in the following mods?<br><ul>%1</ul>").arg(mods),
+        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+
+      for (QModelIndex idx : selection->selectedRows()) {
+
+        int row_idx = idx.data(Qt::UserRole + 1).toInt();
+        ModInfo::Ptr modInfo = ModInfo::getByIndex(row_idx);
+
+        const auto flags = modInfo->getFlags();
+        if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_HIDDEN_FILES) != flags.end()) {
+          const QString modDir = modInfo->absolutePath();
+
+          auto partialResult = restoreHiddenFilesRecursive(renamer, modDir);
+
+          if (partialResult == FileRenamer::RESULT_CANCEL) {
+            result = FileRenamer::RESULT_CANCEL;
+            break;
+          }
+          originModified((m_OrganizerCore.directoryStructure()->getOriginByName(
+            ToWString(modInfo->internalName()))).getID());
+        }
+      }
+    }
+  }
+  else {
+    //single selection
+    ModInfo::Ptr modInfo = ModInfo::getByIndex(m_ContextRow);
+    const QString modDir = modInfo->absolutePath();
+
+    if (QMessageBox::question(this, tr("Are you sure?"),
+        tr("About to restore all hidden files in:\n") + modInfo->name(),
+        QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
+
+      result = restoreHiddenFilesRecursive(renamer, modDir);
+
+      originModified((m_OrganizerCore.directoryStructure()->getOriginByName(
+        ToWString(modInfo->internalName()))).getID());
+    }
+  }
+
+  if (result == FileRenamer::RESULT_CANCEL){
+    log::debug("Restoring hidden files operation cancelled");
+  }
+  else {
+    log::debug("Finished restoring hidden files");
+  }
+}
+
+
 void MainWindow::visitOnNexus_clicked()
 {
   QItemSelectionModel *selection = ui->modList->selectionModel();
@@ -4523,7 +4616,7 @@ void MainWindow::exportModListCSV()
           if (mod_Note->isChecked())
             builder.setRowField("#Note", QString("%1").arg(info->comments().remove(',')));
 					if (primary_Category->isChecked())
-						builder.setRowField("#Primary_Category", (m_CategoryFactory->categoryExists(info->getPrimaryCategory())) ? m_CategoryFactory->getCategoryName(info->getPrimaryCategory()) : "");
+						builder.setRowField("#Primary_Category", (m_CategoryFactory->categoryExists(info->getPrimaryCategory())) ? m_CategoryFactory->getCategoryNameByID(info->getPrimaryCategory()) : "");
 					if (nexus_ID->isChecked())
 						builder.setRowField("#Nexus_ID", info->getNexusID());
 					if (mod_Nexus_URL->isChecked())
@@ -4646,7 +4739,8 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
       QMenu menu(this);
       initModListContextMenu(&menu);
       menu.exec(modList->viewport()->mapToGlobal(pos));
-    } else {
+    }
+    else {
       QMenu menu(this);
 
       QMenu *allMods = new QMenu(&menu);
@@ -4657,6 +4751,7 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
 
       ModInfo::Ptr info = ModInfo::getByIndex(m_ContextRow);
       std::vector<ModInfo::EFlag> flags = info->getFlags();
+      // Context menu for overwrites
       if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_OVERWRITE) != flags.end()) {
         if (QDir(info->absolutePath()).count() > 2) {
           menu.addAction(tr("Sync to Mods..."), &m_OrganizerCore, SLOT(syncOverwrite()));
@@ -4665,10 +4760,33 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
           menu.addAction(tr("Clear Overwrite..."), this, SLOT(clearOverwrite()));
         }
         menu.addAction(tr("Open in Explorer"), this, SLOT(openExplorer_clicked()));
-      } else if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_BACKUP) != flags.end()) {
-        menu.addAction(tr("Restore Backup"), this, SLOT(restoreBackup_clicked()));
-        menu.addAction(tr("Remove Backup..."), this, SLOT(removeMod_clicked()));
-      } else if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_SEPARATOR) != flags.end()){
+      }
+      // Context menu for mod backups
+      else if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_BACKUP) != flags.end()) {
+          menu.addAction(tr("Restore Backup"), this, SLOT(restoreBackup_clicked()));
+          menu.addAction(tr("Remove Backup..."), this, SLOT(removeMod_clicked()));
+          menu.addSeparator();
+          if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_INVALID) != flags.end()) {
+            menu.addAction(tr("Ignore missing data"), this, SLOT(ignoreMissingData_clicked()));
+          }
+          if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_ALTERNATE_GAME) != flags.end()) {
+            menu.addAction(tr("Mark as converted/working"), this, SLOT(markConverted_clicked()));
+          }
+          menu.addSeparator();
+          if (info->getNexusID() > 0) {
+            menu.addAction(tr("Visit on Nexus"), this, SLOT(visitOnNexus_clicked()));
+          }
+
+          const auto url = info->parseCustomURL();
+          if (url.isValid()) {
+            menu.addAction(
+              tr("Visit on %1").arg(url.host()),
+              this, SLOT(visitWebPage_clicked()));
+          }
+
+          menu.addAction(tr("Open in Explorer"), this, SLOT(openExplorer_clicked()));
+      }
+      else if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_SEPARATOR) != flags.end()){
         menu.addSeparator();
         QMenu *addRemoveCategoriesMenu = new QMenu(tr("Change Categories"), &menu);
         populateMenuCategories(addRemoveCategoriesMenu, 0);
@@ -4683,12 +4801,16 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
         menu.addSeparator();
         addModSendToContextMenu(&menu);
         menu.addAction(tr("Select Color..."), this, SLOT(setColor_clicked()));
+
         if(info->getColor().isValid())
           menu.addAction(tr("Reset Color"), this, SLOT(resetColor_clicked()));
+
         menu.addSeparator();
-      } else if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_FOREIGN) != flags.end()) {
+      }
+      else if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_FOREIGN) != flags.end()) {
         addModSendToContextMenu(&menu);
-      } else {
+      }
+      else {
         QMenu *addRemoveCategoriesMenu = new QMenu(tr("Change Categories"), &menu);
         populateMenuCategories(addRemoveCategoriesMenu, 0);
         connect(addRemoveCategoriesMenu, SIGNAL(aboutToHide()), this, SLOT(addRemoveCategories_MenuHandler()));
@@ -4726,6 +4848,10 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
         menu.addAction(tr("Reinstall Mod"), this, SLOT(reinstallMod_clicked()));
         menu.addAction(tr("Remove Mod..."), this, SLOT(removeMod_clicked()));
         menu.addAction(tr("Create Backup"), this, SLOT(backupMod_clicked()));
+
+        if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_HIDDEN_FILES) != flags.end()) {
+          menu.addAction(tr("Restore hidden files"), this, SLOT(restoreHiddenFiles_clicked()));
+        }
 
         menu.addSeparator();
 
@@ -4775,6 +4901,8 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
         if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_ALTERNATE_GAME) != flags.end()) {
           menu.addAction(tr("Mark as converted/working"), this, SLOT(markConverted_clicked()));
         }
+
+        menu.addSeparator();
 
         if (info->getNexusID() > 0)  {
           menu.addAction(tr("Visit on Nexus"), this, SLOT(visitOnNexus_clicked()));
@@ -5570,7 +5698,7 @@ void MainWindow::on_dataTree_customContextMenuRequested(const QPoint &pos)
 
     // offer to hide/unhide file, but not for files from archives
     if (!isArchive) {
-      if (m_ContextItem->text(0).endsWith(ModInfo::s_HiddenExt)) {
+      if (m_ContextItem->text(0).endsWith(ModInfo::s_HiddenExt, Qt::CaseInsensitive)) {
         menu.addAction(tr("Un-Hide"), this, SLOT(unhideFile()));
       } else {
         menu.addAction(tr("Hide"), this, SLOT(hideFile()));

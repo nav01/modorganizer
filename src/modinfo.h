@@ -79,6 +79,7 @@ public:
     FLAG_SEPARATOR,
     FLAG_OVERWRITE,
     FLAG_FOREIGN,
+    FLAG_HIDDEN_FILES,
     FLAG_NOTENDORSED,
     FLAG_NOTES,
     FLAG_PLUGIN_SELECTED,
@@ -95,7 +96,7 @@ public:
     CONTENT_SOUND,
     CONTENT_SCRIPT,
     CONTENT_SKSE,
-	  CONTENT_SKSEFILES,
+    CONTENT_SKSEFILES,
     CONTENT_SKYPROC,
     CONTENT_MCM,
     CONTENT_INI,
@@ -539,6 +540,13 @@ public:
    * @return true if the flag is set, false otherwise
    */
   bool hasFlag(EFlag flag) const;
+
+  /**
+   * @brief test if any of the provided flags are set for this mod
+   * @param flags the flags to test
+   * @return true if any of the flags are set, false otherwise
+   */
+  bool hasAnyOfTheseFlags(std::vector<ModInfo::EFlag> flags) const;
 
   /**
    * @brief test if the mods contains the specified content

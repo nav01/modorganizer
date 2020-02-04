@@ -342,16 +342,17 @@ QString CategoryFactory::getSpecialCategoryName(SpecialCategories type) const
   QString label;
   switch (type)
   {
-    case Checked:         label = tr("Active"); break;
-    case UpdateAvailable: label = tr("Update available"); break;
-    case HasCategory:     label = tr("Has category"); break;
-    case Conflict:        label = tr("Conflicted"); break;
-    case Endorsed:        label = tr("Endorsed"); break;
-    case Backup:          label = tr("Has backup"); break;
-    case Managed:         label = tr("Managed"); break;
-    case HasGameData:     label = tr("Has valid game data"); break;
-    case HasNexusID:      label = tr("Has Nexus ID"); break;
-    case Tracked:         label = tr("Tracked on Nexus"); break;
+    case Checked:         label = QObject::tr("Active"); break;
+    case UpdateAvailable: label = QObject::tr("Update available"); break;
+    case HasCategory:     label = QObject::tr("Has category"); break;
+    case Conflict:        label = QObject::tr("Conflicted"); break;
+    case HasHiddenFiles:  label = QObject::tr("Has hidden files"); break;
+    case Endorsed:        label = QObject::tr("Endorsed"); break;
+    case Backup:          label = QObject::tr("Has backup"); break;
+    case Managed:         label = QObject::tr("Managed"); break;
+    case HasGameData:     label = QObject::tr("Has valid game data"); break;
+    case HasNexusID:      label = QObject::tr("Has Nexus ID"); break;
+    case Tracked:         label = QObject::tr("Tracked on Nexus"); break;
     default: return {};
   }
   return QString("<%1>").arg(label);
