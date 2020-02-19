@@ -27,6 +27,10 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "pluginlist.h"
 #include "settings.h"
 #include "modinforegular.h"
+#include "shared/directoryentry.h"
+#include "shared/fileentry.h"
+#include "shared/filesorigin.h"
+
 #include <appconfig.h>
 #include <utility.h>
 #include <report.h>
@@ -676,11 +680,6 @@ QVariant ModList::headerData(int section, Qt::Orientation orientation,
       return getColumnToolTip(section);
     } else if (role == Qt::TextAlignmentRole) {
       return QVariant(Qt::AlignCenter);
-    } else if (role == Qt::SizeHintRole) {
-      QSize temp = m_FontMetrics.size(Qt::TextSingleLine, getColumnName(section));
-      temp.rwidth() += 20;
-      temp.rheight() += 12;
-      return temp;
     }
   }
   return QAbstractItemModel::headerData(section, orientation, role);
@@ -877,7 +876,7 @@ void ModList::highlightMods(const QItemSelectionModel *selection, const MOShared
   for (QModelIndex idx : selection->selectedRows(PluginList::COL_NAME)) {
     QString modName = idx.data().toString();
 
-    const MOShared::FileEntry::Ptr fileEntry = directoryEntry.findFile(modName.toStdWString());
+    const MOShared::FileEntryPtr fileEntry = directoryEntry.findFile(modName.toStdWString());
     if (fileEntry.get() != nullptr) {
       bool archive = false;
       std::vector<std::pair<int, std::pair<std::wstring, int>>> origins;
@@ -886,7 +885,7 @@ void ModList::highlightMods(const QItemSelectionModel *selection, const MOShared
         origins.insert(origins.end(), std::pair<int, std::pair<std::wstring, int>>(fileEntry->getOrigin(archive), fileEntry->getArchive()));
       }
       for (auto originInfo : origins) {
-        MOShared::FilesOrigin &origin = directoryEntry.getOriginByID(originInfo.first);
+        MOShared::FilesOrigin& origin = directoryEntry.getOriginByID(originInfo.first);
         for (unsigned int i = 0; i < ModInfo::getNumMods(); ++i) {
           if (ModInfo::getByIndex(i)->internalName() == QString::fromStdWString(origin.getName())) {
             ModInfo::getByIndex(i)->setPluginSelected(true);
@@ -1439,15 +1438,7 @@ bool ModList::toggleSelection(QAbstractItemView *itemView)
 
 bool ModList::eventFilter(QObject *obj, QEvent *event)
 {
-  if (event->type() == QEvent::ContextMenu) {
-    QContextMenuEvent *contextEvent = static_cast<QContextMenuEvent*>(event);
-    QWidget *object = qobject_cast<QWidget*>(obj);
-    if ((object != nullptr) && (contextEvent->reason() == QContextMenuEvent::Mouse)) {
-      emit requestColumnSelect(object->mapToGlobal(contextEvent->pos()));
-
-      return true;
-    }
-  } else if ((event->type() == QEvent::KeyPress) && (m_Profile != nullptr)) {
+  if ((event->type() == QEvent::KeyPress) && (m_Profile != nullptr)) {
     QAbstractItemView *itemView = qobject_cast<QAbstractItemView*>(obj);
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 

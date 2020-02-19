@@ -5,14 +5,17 @@
 #include <cstdarg>
 #include <cstdint>
 #include <ctime>
+#include <deque>
 #include <exception>
 #include <functional>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <limits.h>
 #include <list>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <regex>
 #include <set>
@@ -21,7 +24,9 @@
 #include <stdexcept>
 #include <string.h>
 #include <string>
+#include <thread>
 #include <tuple>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <wchar.h>
@@ -37,6 +42,7 @@
 #include <Shlwapi.h>
 #include <tchar.h>
 #include <wincred.h>
+#include <windowsx.h>
 
 // boost
 #include <boost/algorithm/string.hpp>

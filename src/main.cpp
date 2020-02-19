@@ -48,6 +48,7 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "organizercore.h"
 #include "env.h"
 #include "envmodule.h"
+#include "util.h"
 
 #include <eh.h>
 #include <windows_error.h>
@@ -505,6 +506,8 @@ static QString getVersionDisplayString()
 int runApplication(MOApplication &application, SingleInstance &instance,
                    const QString &splashPath)
 {
+  TimeThis tt("runApplication() to exec()");
+
   log::info(
     "starting Mod Organizer version {} revision {} in {}, usvfs: {}",
     getVersionDisplayString(), GITID, QCoreApplication::applicationDirPath(),
@@ -596,13 +599,17 @@ int runApplication(MOApplication &application, SingleInstance &instance,
 
     checkPathsForSanity(*game, settings);
 
-    if (splashPath.startsWith(':')) {
-      // currently using MO splash, see if the plugin contains one
-      QString pluginSplash
+    bool useSplash = settings.useSplash();
+
+    if (useSplash) {
+      if (splashPath.startsWith(':')) {
+        // currently using MO splash, see if the plugin contains one
+        QString pluginSplash
           = QString(":/%1/splash").arg(game->gameShortName());
-      QImage image(pluginSplash);
-      if (!image.isNull()) {
-        image.save(dataPath + "/splash.png");
+        QImage image(pluginSplash);
+        if (!image.isNull()) {
+          image.save(dataPath + "/splash.png");
+        }
       }
     }
 
@@ -635,8 +642,6 @@ int runApplication(MOApplication &application, SingleInstance &instance,
       }
     }
 
-    Q_ASSERT(!edition.isEmpty());
-
     game->setGameVariant(edition);
 
     log::info(
@@ -644,7 +649,9 @@ int runApplication(MOApplication &application, SingleInstance &instance,
       game->gameName(), game->gameShortName(), game->steamAPPId(),
       game->gameDirectory().absolutePath());
 
+    CategoryFactory::instance().loadCategories();
     organizer.updateExecutablesList();
+    organizer.updateModInfoFromDisc();
 
     QString selectedProfileName = determineProfile(arguments, settings);
     organizer.setCurrentProfile(selectedProfileName);
@@ -698,12 +705,18 @@ int runApplication(MOApplication &application, SingleInstance &instance,
 		  }
 	  }
 
-    QPixmap pixmap(splashPath);
-    QSplashScreen splash(pixmap);
+    QPixmap pixmap;
 
-    settings.geometry().centerOnMainWindowMonitor(&splash);
-    splash.show();
-    splash.activateWindow();
+    QSplashScreen splash(nullptr);
+
+    if (useSplash) {
+      pixmap = QPixmap(splashPath);
+      splash.setPixmap(pixmap);
+
+      settings.geometry().centerOnMainWindowMonitor(&splash);
+      splash.show();
+      splash.activateWindow();
+    }
 
     QString apiKey;
     if (settings.nexus().apiKey(apiKey)) {
@@ -735,14 +748,17 @@ int runApplication(MOApplication &application, SingleInstance &instance,
       QObject::connect(&instance, SIGNAL(messageSent(QString)), &organizer,
                        SLOT(externalMessage(QString)));
 
-      // this must be before readSettings(), see DockFixer in mainwindow.cpp
-      splash.finish(&mainWindow);
-
       log::debug("displaying main window");
       mainWindow.show();
       mainWindow.activateWindow();
 
-      splash.finish(&mainWindow);
+      if (useSplash) {
+        // don't pass mainwindow as it just waits half a second for it
+        // instead of proceding
+        splash.finish(nullptr);
+      }
+
+      tt.stop();
 
       res = application.exec();
       mainWindow.close();
@@ -844,6 +860,8 @@ void initLogging()
 
 int main(int argc, char *argv[])
 {
+  TimeThis tt("main to runApplication()");
+
   // handle --crashdump first
   for (int i=1; i<argc; ++i) {
     if (std::strcmp(argv[i], "--crashdump") == 0) {
@@ -874,6 +892,8 @@ int main(int argc, char *argv[])
 
   MOApplication application(argc, argv);
   QStringList arguments = application.arguments();
+
+  SetThisThreadName("main");
 
   setupPath();
 
@@ -940,6 +960,8 @@ int main(int argc, char *argv[])
     if (!QFile::exists(dataPath + "/splash.png")) {
       splash = ":/MO/gui/splash";
     }
+
+    tt.stop();
 
     const int result = runApplication(application, instance, splash);
     if (result != RestartExitCode) {

@@ -29,6 +29,8 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "modinfodialogcategories.h"
 #include "modinfodialognexus.h"
 #include "modinfodialogfiletree.h"
+#include "shared/directoryentry.h"
+#include "shared/filesorigin.h"
 #include <filesystem>
 
 using namespace MOBase;
@@ -47,11 +49,24 @@ int naturalCompare(const QString& a, const QString& b)
     return c;
   }();
 
+
+  // todo: remove this once the fix is released
+  // see https://bugreports.qt.io/projects/QTBUG/issues/QTBUG-81673
+  // and https://codereview.qt-project.org/c/qt/qtbase/+/287966/5/src/corelib/text/qcollator_win.cpp
+  if (!a.size()) {
+    return b.size() ? -1 : 0;
+  }
+  if (!b.size()) {
+    return +1;
+  }
+
+
   return c.compare(a, b);
 }
 
 bool canPreviewFile(
-  PluginContainer& pluginContainer, bool isArchive, const QString& filename)
+  const PluginContainer& pluginContainer,
+  bool isArchive, const QString& filename)
 {
   if (isArchive) {
     return false;
@@ -272,12 +287,13 @@ int ModInfoDialog::exec()
 
   // whether to select the first tab; if the main window requested a specific
   // tab, it is selected when encountered in update()
-  const auto selectFirst = (m_initialTab == ModInfoTabIDs::None);
+  const auto noCustomTabRequested = (m_initialTab == ModInfoTabIDs::None);
+  const auto requestedTab = m_initialTab;
 
   update(true);
 
-  if (selectFirst && ui->tabWidget->count() > 0) {
-    ui->tabWidget->setCurrentIndex(0);
+  if (noCustomTabRequested) {
+    m_core->settings().widgets().restoreIndex(ui->tabWidget);
   }
 
   const int r = TutorableDialog::exec();
@@ -687,6 +703,8 @@ void ModInfoDialog::saveTabOrder() const
   }
 
   m_core->settings().geometry().setModInfoTabOrder(names);
+  // save last opened index
+  m_core->settings().widgets().saveIndex(ui->tabWidget);
 }
 
 void ModInfoDialog::onOriginModified(int originID)

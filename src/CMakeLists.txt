@@ -133,9 +133,11 @@ SET(organizer_SRCS
 	filerenamer.cpp
 	texteditor.cpp
 	env.cpp
+	envfs.cpp
 	envmetrics.cpp
 	envmodule.cpp
 	envsecurity.cpp
+	envshell.cpp
 	envshortcut.cpp
 	envwindows.cpp
 	colortable.cpp
@@ -145,10 +147,19 @@ SET(organizer_SRCS
 	loot.cpp
 	lootdialog.cpp
 	filterlist.cpp
+	datatab.cpp
+	filetree.cpp
+	filetreemodel.cpp
+	filetreeitem.cpp
+	iconfetcher.cpp
 
     shared/windows_error.cpp
     shared/error_report.cpp
     shared/directoryentry.cpp
+	shared/fileentry.cpp
+	shared/filesorigin.cpp
+	shared/fileregister.cpp
+	shared/originconnection.cpp
     shared/util.cpp
     shared/appconfig.cpp
     shared/leaktrace.cpp
@@ -258,9 +269,11 @@ SET(organizer_HDRS
 	filerenamer.h
 	texteditor.h
 	env.h
+	envfs.h
 	envmetrics.h
 	envmodule.h
 	envsecurity.h
+	envshell.h
 	envshortcut.h
 	envwindows.h
 	colortable.h
@@ -270,10 +283,20 @@ SET(organizer_HDRS
 	lootdialog.h
 	json.h
 	filterlist.h
+	datatab.h
+	filetree.h
+	filetreeitem.h
+	filetreemodel.h
+	iconfetcher.h
 
     shared/windows_error.h
     shared/error_report.h
     shared/directoryentry.h
+	shared/fileentry.h
+	shared/filesorigin.h
+	shared/fileregister.h
+	shared/fileregisterfwd.h
+	shared/originconnection.h
     shared/util.h
     shared/appconfig.h
     shared/appconfig.inc
@@ -322,16 +345,13 @@ SET(organizer_RCS
 source_group(src REGULAR_EXPRESSION ".*\\.(h|cpp|ui)")
 
 set(application
-	filterlist
 	iuserinterface
 	main
-	mainwindow
 	moapplication
 	moshortcut
 	sanitychecks
 	selfupdater
 	singleinstance
-	statusbar
 )
 
 set(browser
@@ -342,8 +362,6 @@ set(browser
 set(core
 	categories
     categoriestable
-	shared/directoryentry
-	directoryrefresher
 	installationmanager
 	instancemanager
 	loadmechanism
@@ -386,9 +404,11 @@ set(downloads
 
 set(env
 	env
+	envfs
 	envmetrics
 	envmodule
 	envsecurity
+	envshell
 	envshortcut
 	envwindows
 )
@@ -401,6 +421,17 @@ set(executables
 set(loot
 	loot
 	lootdialog
+)
+
+set(mainwindow
+	datatab
+	iconfetcher
+	filetree
+	filetreeitem
+	filetreemodel
+	filterlist
+	mainwindow
+	statusbar
 )
 
 set(modinfo
@@ -447,6 +478,16 @@ set(profiles
 	profile
 	profileinputdialog
 	profilesdialog
+)
+
+set(register
+	shared/directoryentry
+	shared/fileentry
+	shared/filesorigin
+	shared/fileregister
+	shared/fileregisterfwd
+	shared/originconnection
+	directoryrefresher
 )
 
 set(settings
@@ -499,9 +540,9 @@ set(widgets
 )
 
 set(src_filters
-	application core browser dialogs downloads env executables loot modinfo
-	modinfo\\dialog modlist plugins previews profiles settings settingsdialog
-	utilities widgets
+	application core browser dialogs downloads env executables loot mainwindow
+	modinfo modinfo\\dialog modlist plugins previews profiles register settings
+	settingsdialog utilities widgets
 )
 
 foreach(filter in list ${src_filters})
@@ -515,6 +556,8 @@ endforeach()
 
 file(GLOB_RECURSE rule_files ../vsbuild/CMakeFiles/*.rule)
 file(GLOB qm_files ../vsbuild/src/*.qm)
+
+set(organizer_misc ../modorganizer.natvis)
 
 source_group(cmake FILES CMakeLists.txt)
 source_group(autogen FILES ${rule_files} ${qm_files})
@@ -608,7 +651,10 @@ ELSE()
   SET(usvfs_name usvfs_x86)
 ENDIF()
 
-ADD_EXECUTABLE(ModOrganizer WIN32 ${organizer_HDRS} ${organizer_SRCS} ${organizer_UIS} ${organizer_RCS} ${organizer_QRCS} ${organizer_translations_qm})
+ADD_EXECUTABLE(
+	ModOrganizer WIN32
+	${organizer_HDRS} ${organizer_SRCS} ${organizer_UIS} ${organizer_RCS}
+	${organizer_QRCS} ${organizer_translations_qm} ${organizer_misc})
 
 TARGET_LINK_LIBRARIES(ModOrganizer
                       Qt5::Widgets Qt5::WinExtras Qt5::WebEngineWidgets Qt5::Quick

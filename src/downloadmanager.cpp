@@ -281,14 +281,16 @@ void DownloadManager::pauseAll()
 }
 
 
-void DownloadManager::setOutputDirectory(const QString &outputDirectory)
+void DownloadManager::setOutputDirectory(const QString &outputDirectory, const bool refresh)
 {
   QStringList directories = m_DirWatcher.directories();
   if (directories.length() != 0) {
     m_DirWatcher.removePaths(directories);
   }
   m_OutputDirectory = QDir::fromNativeSeparators(outputDirectory);
-  refreshList();
+  if (refresh) {
+    refreshList();
+  }
   m_DirWatcher.addPath(m_OutputDirectory);
 }
 
@@ -296,7 +298,8 @@ void DownloadManager::setOutputDirectory(const QString &outputDirectory)
 void DownloadManager::setSupportedExtensions(const QStringList &extensions)
 {
   m_SupportedExtensions = extensions;
-  refreshList();
+  // this happens only during initialization so don't refresh yet as that will
+  // happen later during initDownloadView
 }
 
 void DownloadManager::setShowHidden(bool showHidden)
@@ -317,6 +320,8 @@ void DownloadManager::setPluginContainer(PluginContainer *pluginContainer)
 
 void DownloadManager::refreshList()
 {
+  TimeThis tt("DownloadManager::refreshList()");
+
   try {
     //avoid triggering other refreshes
     startDisableDirWatcher();
@@ -1870,7 +1875,7 @@ void DownloadManager::nxmFileInfoFromMd5Available(QString gameName, QVariant use
   //Unable to determine the correct mod / file.  Revert to the old method
   if (chosenIdx < 0) {
     //don't use the normal state set function as we don't want to create a meta file
-    info->m_State = DownloadManager::STATE_READY; 
+    info->m_State = DownloadManager::STATE_READY;
     queryInfo(m_ActiveDownloads.indexOf(info));
     return;
   }
@@ -2027,7 +2032,7 @@ void DownloadManager::downloadFinished(int index)
         foreach (const QVariant &server, info->m_FileInfo->userData["downloadMap"].toList()) {
           QVariantMap serverMap = server.toMap();
           if (serverMap["URI"].toString() == url) {
-            int deltaTime = info->m_StartTime.secsTo(QTime::currentTime());
+            int deltaTime = info->m_StartTime.elapsed() / 1000;
             if (deltaTime > 5) {
               emit downloadSpeed(serverMap["short_name"].toString(), (info->m_TotalSize - info->m_PreResumeSize) / deltaTime);
             } // no division by zero please! Also, if the download is shorter than a few seconds, the result is way to inprecise

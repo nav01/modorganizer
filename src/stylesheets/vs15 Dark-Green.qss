@@ -71,6 +71,10 @@ QAbstractItemView {
     background-color: #009933;
     color: #F1F1F1; }
 
+QAbstractItemView[filtered=true] {
+	border: 2px solid #f00 !important;
+}
+
 QAbstractItemView,
 QListView,
 QTreeView {
@@ -692,19 +696,6 @@ QTabBar QToolButton::left-arrow:hover {
   image: url(./vs15/scrollbar-left-hover.png); }
 
 /* Special styles */
-/* fix margins on tabs pane */
-QLineEdit#espFilterEdit {
-  margin: 0 0 6px 0; }
-
-QTreeView#downloadView {
-  margin: 4px 4px 0 4px; }
-
-QCheckBox#showHiddenBox {
-  margin: 0 0 4px 4px; }
-
-QLineEdit#downloadFilterEdit {
-  margin: 0 4px 4px 0; }
-
 QWidget#tabImages QPushButton {
   background-color: transparent;
   margin: 0 .3em;
@@ -768,3 +759,7 @@ QDialog#QueryOverwriteDialog {
 
 QDialog#ModInfoDialog {
   min-width: 850px; }
+
+QLineEdit[valid-filter=false] {
+	background-color: #661111 !important;
+}

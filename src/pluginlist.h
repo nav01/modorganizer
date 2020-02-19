@@ -20,7 +20,6 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PLUGINLIST_H
 #define PLUGINLIST_H
 
-#include <directoryentry.h>
 #include <ipluginlist.h>
 #include "profile.h"
 #include "loot.h"
@@ -31,6 +30,7 @@ namespace MOBase { class IPluginGame; }
 #include <QListWidget>
 #include <QTimer>
 #include <QTime>
+#include <QElapsedTimer>
 #include <QTemporaryFile>
 
 #pragma warning(push)
@@ -381,7 +381,7 @@ private:
 
   QTemporaryFile m_TempFile;
 
-  QTime m_LastCheck;
+  QElapsedTimer m_LastCheck;
 
   const MOBase::IPluginGame *m_GamePlugin;
 

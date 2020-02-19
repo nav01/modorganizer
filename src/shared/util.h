@@ -20,7 +20,9 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <log.h>
 #include <string>
+#include <filesystem>
 #include <versioninfo.h>
 
 class Executable;
@@ -36,16 +38,29 @@ bool FileExists(const std::wstring &searchPath, const std::wstring &filename);
 std::string ToString(const std::wstring &source, bool utf8);
 std::wstring ToWString(const std::string &source, bool utf8);
 
-std::string &ToLower(std::string &text);
-std::string ToLower(const std::string &text);
+std::string& ToLowerInPlace(std::string& text);
+std::string ToLowerCopy(const std::string& text);
 
-std::wstring &ToLower(std::wstring &text);
-std::wstring ToLower(const std::wstring &text);
+std::wstring& ToLowerInPlace(std::wstring& text);
+std::wstring ToLowerCopy(const std::wstring& text);
+std::wstring ToLowerCopy(std::wstring_view text);
 
 bool CaseInsensitiveEqual(const std::wstring &lhs, const std::wstring &rhs);
 
 MOBase::VersionInfo createVersionInfo();
 QString getUsvfsVersionString();
+
+void SetThisThreadName(const QString& s);
+void checkDuplicateShortcuts(const QMenu& m);
+
+inline FILETIME ToFILETIME(std::filesystem::file_time_type t)
+{
+  FILETIME ft;
+  static_assert(sizeof(t) == sizeof(ft));
+
+  std::memcpy(&ft, &t, sizeof(FILETIME));
+  return ft;
+}
 
 } // namespace MOShared
 

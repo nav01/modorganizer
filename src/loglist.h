@@ -20,8 +20,9 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef LOGBUFFER_H
 #define LOGBUFFER_H
 
-#include <QTreeView>
 #include <log.h>
+#include <QTreeView>
+#include <deque>
 
 class OrganizerCore;
 
@@ -48,9 +49,6 @@ protected:
   QVariant headerData(
     int section, Qt::Orientation ori, int role=Qt::DisplayRole) const override;
 
-signals:
-  void entryAdded(MOBase::log::Entry e);
-
 private:
   std::deque<MOBase::log::Entry> m_entries;
 
@@ -75,7 +73,10 @@ public:
 
 private:
   OrganizerCore* m_core;
+  QTimer m_timer;
+
   void onContextMenu(const QPoint& pos);
+  void onNewEntry();
 };
 
 #endif // LOGBUFFER_H

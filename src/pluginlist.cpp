@@ -23,6 +23,10 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "modinfo.h"
 #include "modlist.h"
 #include "viewmarkingscrollbar.h"
+#include "shared/directoryentry.h"
+#include "shared/filesorigin.h"
+#include "shared/fileentry.h"
+
 #include <utility.h>
 #include <iplugingame.h>
 #include <espfile.h>
@@ -144,10 +148,10 @@ void PluginList::highlightPlugins(const QItemSelectionModel *selection, const MO
     if (!selectedMod.isNull() && profile.modEnabled(modIndex)) {
       QDir dir(selectedMod->absolutePath());
       QStringList plugins = dir.entryList(QStringList() << "*.esp" << "*.esm" << "*.esl");
-      MOShared::FilesOrigin origin = directoryEntry.getOriginByName(selectedMod->internalName().toStdWString());
+      const MOShared::FilesOrigin& origin = directoryEntry.getOriginByName(selectedMod->internalName().toStdWString());
       if (plugins.size() > 0) {
         for (auto plugin : plugins) {
-          MOShared::FileEntry::Ptr file = directoryEntry.findFile(plugin.toStdWString());
+          MOShared::FileEntryPtr file = directoryEntry.findFile(plugin.toStdWString());
           if (file && file->getOrigin() != origin.getID()) {
             const std::vector<std::pair<int, std::pair<std::wstring, int>>> alternatives = file->getAlternatives();
             if (std::find_if(alternatives.begin(), alternatives.end(), [&](const std::pair<int, std::pair<std::wstring, int>>& element) { return element.first == origin.getID(); }) == alternatives.end())
@@ -170,6 +174,8 @@ void PluginList::refresh(const QString &profileName
                          , const QString &lockedOrderFile
                          , bool force)
 {
+  TimeThis tt("PluginList::refresh()");
+
   if (force) {
     m_ESPs.clear();
     m_ESPsByName.clear();
@@ -185,8 +191,8 @@ void PluginList::refresh(const QString &profileName
 
   QStringList availablePlugins;
 
-  std::vector<FileEntry::Ptr> files = baseDirectory.getFiles();
-  for (FileEntry::Ptr current : files) {
+  std::vector<FileEntryPtr> files = baseDirectory.getFiles();
+  for (FileEntryPtr current : files) {
     if (current.get() == nullptr) {
       continue;
     }
@@ -217,7 +223,7 @@ void PluginList::refresh(const QString &profileName
         bool hasIni = baseDirectory.findFile(ToWString(iniPath)).get() != nullptr;
         std::set<QString> loadedArchives;
         QString candidateName;
-        for (FileEntry::Ptr archiveCandidate : files) {
+        for (FileEntryPtr archiveCandidate : files) {
           candidateName = ToQString(archiveCandidate->getName());
           if (candidateName.startsWith(baseName, Qt::CaseInsensitive) &&
              (candidateName.endsWith(".bsa", Qt::CaseInsensitive) ||
@@ -507,7 +513,6 @@ void PluginList::writeLockedOrder(const QString &fileName) const
     file->write(QString("%1|%2\r\n").arg(iter->first).arg(iter->second).toUtf8());
   }
   file.commit();
-  log::debug("{} saved", QDir::toNativeSeparators(fileName));
 }
 
 
@@ -531,9 +536,7 @@ void PluginList::saveTo(const QString &lockedOrderFileName
         deleterFile->write("\r\n");
       }
     }
-    if (deleterFile.commitIfDifferent(m_LastSaveHash[deleterFileName])) {
-      log::debug("{} saved", QDir::toNativeSeparators(deleterFileName));
-    }
+    deleterFile.commitIfDifferent(m_LastSaveHash[deleterFileName]);
   } else if (QFile::exists(deleterFileName)) {
     shellDelete(QStringList() << deleterFileName);
   }
@@ -551,7 +554,7 @@ bool PluginList::saveLoadOrder(DirectoryEntry &directoryStructure)
 
   for (ESPInfo &esp : m_ESPs) {
     std::wstring espName = ToWString(esp.name);
-    const FileEntry::Ptr fileEntry = directoryStructure.findFile(espName);
+    const FileEntryPtr fileEntry = directoryStructure.findFile(espName);
     if (fileEntry.get() != nullptr) {
       QString fileName;
       bool archive = false;
@@ -1315,11 +1318,6 @@ QVariant PluginList::headerData(int section, Qt::Orientation orientation,
       return getColumnName(section);
     } else if (role == Qt::ToolTipRole) {
       return getColumnToolTip(section);
-    } else if (role == Qt::SizeHintRole) {
-      QSize temp = m_FontMetrics.size(Qt::TextSingleLine, getColumnName(section));
-      temp.rwidth() += 25;
-      temp.rheight() += 12;
-      return temp;
     }
   }
   return QAbstractItemModel::headerData(section, orientation, role);
