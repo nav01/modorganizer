@@ -649,7 +649,7 @@ int runApplication(MOApplication &application, SingleInstance &instance,
       game->gameName(), game->gameShortName(), game->steamAPPId(),
       game->gameDirectory().absolutePath());
 
-    CategoryFactory::instance().loadCategories();
+    CategoryFactory::instance()->loadCategories();
     organizer.updateExecutablesList();
     organizer.updateModInfoFromDisc();
 
