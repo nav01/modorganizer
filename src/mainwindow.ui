@@ -60,13 +60,13 @@
          <number>3</number>
         </property>
         <property name="topMargin">
-         <number>7</number>
+         <number>15</number>
         </property>
         <property name="rightMargin">
          <number>3</number>
         </property>
         <property name="bottomMargin">
-         <number>1</number>
+         <number>0</number>
         </property>
         <item>
          <widget class="QTreeWidget" name="filters">
@@ -102,7 +102,7 @@
           </attribute>
           <column>
            <property name="text">
-            <string>State</string>
+            <string/>
            </property>
            <property name="toolTip">
             <string>State of the filter, can either be Disabled, Enabled or Inverted.</string>
@@ -158,18 +158,18 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="1,1,2">
            <property name="leftMargin">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="topMargin">
             <number>2</number>
            </property>
            <property name="rightMargin">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="bottomMargin">
-            <number>0</number>
+            <number>2</number>
            </property>
            <item>
             <widget class="QRadioButton" name="filtersAnd">
@@ -196,6 +196,12 @@
            </item>
            <item>
             <widget class="QComboBox" name="filtersSeparators">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="toolTip">
               <string>Filter: only show the separators that match the current filters
 Show: always show separators
@@ -582,9 +588,15 @@ p, li { white-space: pre-wrap; }
        </widget>
        <widget class="QWidget" name="layoutWidget_2">
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>2</number>
+         </property>
          <item>
           <widget class="QFrame" name="startGroup">
            <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,0">
+            <property name="bottomMargin">
+             <number>4</number>
+            </property>
             <item>
              <widget class="QComboBox" name="executablesListBox">
               <property name="sizePolicy">
@@ -775,6 +787,15 @@ p, li { white-space: pre-wrap; }
              <string>Plugins</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_7">
                <item>
@@ -795,20 +816,17 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="MOBase::LineEditClear" name="espFilterEdit">
-                 <property name="toolTip">
-                  <string>Filter the list of plugins.</string>
+                <spacer name="horizontalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="whatsThis">
-                  <string>Filter the list of plugins.</string>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
                  </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="placeholderText">
-                  <string>Filter</string>
-                 </property>
-                </widget>
+                </spacer>
                </item>
                <item>
                 <widget class="QPushButton" name="restoreButton">
@@ -942,6 +960,39 @@ p, li { white-space: pre-wrap; }
                </attribute>
               </widget>
              </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_10">
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="MOBase::LineEditClear" name="espFilterEdit">
+                 <property name="toolTip">
+                  <string>Filter the list of plugins.</string>
+                 </property>
+                 <property name="whatsThis">
+                  <string>Filter the list of plugins.</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Filter</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="bsaTab">
@@ -952,6 +1003,15 @@ p, li { white-space: pre-wrap; }
              <string>Archives</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_9">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0">
                <item>
@@ -1010,6 +1070,15 @@ p, li { white-space: pre-wrap; }
              <string>Data</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_5">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_12">
                <item>
@@ -1030,43 +1099,17 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="dataTabFilter">
-                 <property name="toolTip">
-                  <string>Filter the Data tree.</string>
+                <spacer name="horizontalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="whatsThis">
-                  <string>Filter the Data tree.</string>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
                  </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="dataTabShowOnlyConflicts">
-                 <property name="toolTip">
-                  <string>Filter the list so that only conflicts are displayed.</string>
-                 </property>
-                 <property name="whatsThis">
-                  <string>Filter the list so that only conflicts are displayed.</string>
-                 </property>
-                 <property name="text">
-                  <string>Conflicts only</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="dataTabShowFromArchives">
-                 <property name="toolTip">
-                  <string>Filter the list so that files from archives are shown.</string>
-                 </property>
-                 <property name="statusTip">
-                  <string/>
-                 </property>
-                 <property name="whatsThis">
-                  <string>Filter the list so that files from archives are shown.</string>
-                 </property>
-                 <property name="text">
-                  <string>Archives</string>
-                 </property>
-                </widget>
+                </spacer>
                </item>
               </layout>
              </item>
@@ -1096,6 +1139,49 @@ p, li { white-space: pre-wrap; }
                </item>
               </layout>
              </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="1,1,2">
+               <item>
+                <widget class="QCheckBox" name="dataTabShowOnlyConflicts">
+                 <property name="toolTip">
+                  <string>Filter the list so that only conflicts are displayed.</string>
+                 </property>
+                 <property name="whatsThis">
+                  <string>Filter the list so that only conflicts are displayed.</string>
+                 </property>
+                 <property name="text">
+                  <string>Conflicts only</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="dataTabShowFromArchives">
+                 <property name="toolTip">
+                  <string>Filter the list so that files from archives are shown.</string>
+                 </property>
+                 <property name="statusTip">
+                  <string/>
+                 </property>
+                 <property name="whatsThis">
+                  <string>Filter the list so that files from archives are shown.</string>
+                 </property>
+                 <property name="text">
+                  <string>Archives</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="dataTabFilter">
+                 <property name="toolTip">
+                  <string>Filter the Data tree.</string>
+                 </property>
+                 <property name="whatsThis">
+                  <string>Filter the Data tree.</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="savesTab">
@@ -1103,6 +1189,15 @@ p, li { white-space: pre-wrap; }
              <string>Saves</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_3">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QListWidget" name="savegameList">
                <property name="contextMenuPolicy">
@@ -1138,8 +1233,17 @@ p, li { white-space: pre-wrap; }
              <string>Downloads</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_7">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+              <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
                <item>
                 <widget class="QPushButton" name="btnRefreshDownloads">
                  <property name="toolTip">
@@ -1158,30 +1262,17 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="MOBase::LineEditClear" name="downloadFilterEdit">
-                 <property name="toolTip">
-                  <string>Filter the list of downloads.</string>
+                <spacer name="horizontalSpacer_7">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="whatsThis">
-                  <string>Filter the list of downloads.</string>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
                  </property>
-                 <property name="placeholderText">
-                  <string>Filter</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="showHiddenBox">
-                 <property name="toolTip">
-                  <string>Show downloads marked as hidden.</string>
-                 </property>
-                 <property name="whatsThis">
-                  <string>Show downloads marked as hidden.</string>
-                 </property>
-                 <property name="text">
-                  <string>Hidden files</string>
-                 </property>
-                </widget>
+                </spacer>
                </item>
               </layout>
              </item>
@@ -1230,6 +1321,49 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="sortingEnabled">
                   <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="1,1,2">
+               <item>
+                <widget class="QCheckBox" name="showHiddenBox">
+                 <property name="toolTip">
+                  <string>Show downloads marked as hidden.</string>
+                 </property>
+                 <property name="whatsThis">
+                  <string>Show downloads marked as hidden.</string>
+                 </property>
+                 <property name="text">
+                  <string>Hidden files</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="MOBase::LineEditClear" name="downloadFilterEdit">
+                 <property name="toolTip">
+                  <string>Filter the list of downloads.</string>
+                 </property>
+                 <property name="whatsThis">
+                  <string>Filter the list of downloads.</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Filter</string>
                  </property>
                 </widget>
                </item>
@@ -1288,7 +1422,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1358,6 +1492,12 @@ p, li { white-space: pre-wrap; }
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QDockWidget" name="logDock">
+   <property name="minimumSize">
+    <size>
+     <width>80</width>
+     <height>42</height>
+    </size>
+   </property>
    <property name="features">
     <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
@@ -1383,6 +1523,18 @@ p, li { white-space: pre-wrap; }
      </property>
      <item>
       <widget class="LogList" name="logList">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>20</height>
+        </size>
+       </property>
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
