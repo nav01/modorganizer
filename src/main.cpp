@@ -27,7 +27,7 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include <windows.h>
 #include <DbgHelp.h>
 
-#include <appconfig.h>
+#include "shared/appconfig.h"
 #include <utility.h>
 #include <scopeguard.h>
 #include "mainwindow.h"
@@ -48,10 +48,10 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "organizercore.h"
 #include "env.h"
 #include "envmodule.h"
-#include "util.h"
+#include "shared/util.h"
 
 #include <eh.h>
-#include <windows_error.h>
+#include "shared/windows_error.h"
 #include <usvfs.h>
 #include <log.h>
 
@@ -266,8 +266,6 @@ QString determineProfile(QStringList &arguments, const Settings &settings)
   if (!selectedProfileName) {
     log::debug("no configured profile");
     selectedProfileName = "Default";
-  } else {
-    log::debug("configured profile: {}", *selectedProfileName);
   }
 
   return *selectedProfileName;
@@ -300,7 +298,10 @@ MOBase::IPluginGame *determineCurrentGame(
   if (gameConfigured) {
     MOBase::IPluginGame *game = plugins.managedGame(*gameName);
     if (game == nullptr) {
-      reportError(QObject::tr("Plugin to handle %1 no longer installed").arg(*gameName));
+      reportError(
+        QObject::tr("Plugin to handle %1 no longer installed. An antivirus might have deleted files.")
+        .arg(*gameName));
+
       return nullptr;
     }
 
@@ -958,6 +959,8 @@ int main(int argc, char *argv[])
     }
 
     log::getDefault().setFile(MOBase::log::File::single(logFile.toStdWString()));
+
+    log::debug("command line: '{}'", QString::fromWCharArray(GetCommandLineW()));
 
     QString splash = dataPath + "/splash.png";
     if (!QFile::exists(dataPath + "/splash.png")) {

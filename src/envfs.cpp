@@ -1,6 +1,6 @@
 #include "envfs.h"
 #include "env.h"
-#include "util.h"
+#include "shared/util.h"
 #include <utility.h>
 #include <log.h>
 
@@ -158,7 +158,7 @@ public:
   HandleCloserThread()
     : m_ready(false)
   {
-    m_handles.reserve(50'000);
+    m_handles.reserve(50000);
   }
 
   void shrink()
@@ -173,7 +173,11 @@ public:
 
   void wakeup()
   {
-    m_ready = true;
+    {
+      std::unique_lock lock(m_mutex);
+      m_ready = true;
+    }
+
     m_cv.notify_one();
   }
 

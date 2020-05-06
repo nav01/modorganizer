@@ -34,7 +34,7 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "organizercore.h"
 #include <versioninfo.h>
 #include <report.h>
-#include <util.h>
+#include "shared/util.h"
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -160,7 +160,7 @@ void SelfUpdater::testForUpdate(const Settings& settings)
         VersionInfo newestVer(newest["tag_name"].toString());
         if (newestVer > this->m_MOVersion) {
           m_UpdateCandidate = newest;
-          log::debug("update available: {} -> {}",
+          log::info("update available: {} -> {}",
                  this->m_MOVersion.displayString(3),
                  newestVer.displayString(3));
           emit updateAvailable();

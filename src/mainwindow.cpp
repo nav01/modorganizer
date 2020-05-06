@@ -71,7 +71,7 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "settingsdialog.h"
 #include <safewritefile.h>
 #include "nxmaccessmanager.h"
-#include "appconfig.h"
+#include "shared/appconfig.h"
 #include "eventfilter.h"
 #include "statusbar.h"
 #include "filterlist.h"
@@ -203,6 +203,42 @@ QString UnmanagedModName()
 }
 
 bool runLoot(QWidget* parent, OrganizerCore& core, bool didUpdateMasterList);
+
+
+void setFilterShortcuts(QWidget* widget, QLineEdit* edit)
+{
+  auto activate = [=] {
+    edit->setFocus();
+    edit->selectAll();
+  };
+
+  auto reset = [=] {
+    edit->clear();
+    widget->setFocus();
+  };
+
+  auto hookActivate = [activate](auto* w) {
+    auto* s = new QShortcut(QKeySequence::Find, w);
+    s->setAutoRepeat(false);
+    s->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(s, &QShortcut::activated, activate);
+  };
+
+  auto hookReset = [reset](auto* w) {
+    auto* s = new QShortcut(QKeySequence(Qt::Key_Escape), w);
+    s->setAutoRepeat(false);
+    s->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(s, &QShortcut::activated, reset);
+  };
+
+
+  hookActivate(widget);
+  hookReset(widget);
+
+  hookActivate(edit);
+  hookReset(edit);
+}
+
 
 MainWindow::MainWindow(Settings &settings
                        , OrganizerCore &organizerCore
@@ -434,8 +470,9 @@ MainWindow::MainWindow(Settings &settings
 
   new QShortcut(QKeySequence::Refresh, this, SLOT(refreshProfile_activated()));
 
-  new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), this, SLOT(search_activated()));
-  new QShortcut(QKeySequence(Qt::Key_Escape), this, SLOT(searchClear_activated()));
+  setFilterShortcuts(ui->modList, ui->modFilterEdit);
+  setFilterShortcuts(ui->espList, ui->espFilterEdit);
+  setFilterShortcuts(ui->downloadView, ui->downloadFilterEdit);
 
   m_UpdateProblemsTimer.setSingleShot(true);
   connect(&m_UpdateProblemsTimer, SIGNAL(timeout()), this, SLOT(updateProblemsButton()));
@@ -488,6 +525,7 @@ MainWindow::MainWindow(Settings &settings
   updatePluginCount();
   updateModCount();
   processUpdates();
+  ui->statusBar->updateNormalMessage(m_OrganizerCore);
 }
 
 void MainWindow::setupModList()
@@ -1664,6 +1702,7 @@ void MainWindow::activateSelectedProfile()
   m_OrganizerCore.refreshModList();
   updateModCount();
   updatePluginCount();
+  ui->statusBar->updateNormalMessage(m_OrganizerCore);
 }
 
 void MainWindow::on_profileBox_currentIndexChanged(int index)
@@ -1811,10 +1850,16 @@ QDir MainWindow::currentSavesDir() const
   if (m_OrganizerCore.currentProfile()->localSavesEnabled()) {
     savesDir.setPath(m_OrganizerCore.currentProfile()->savePath());
   } else {
+    auto iniFiles = m_OrganizerCore.managedGame()->iniFiles();
+
+    if (iniFiles.isEmpty()) {
+      return m_OrganizerCore.managedGame()->savesDirectory();
+    }
+
     QString iniPath = m_OrganizerCore.currentProfile()->localSettingsEnabled()
                     ? m_OrganizerCore.currentProfile()->absolutePath()
                     : m_OrganizerCore.managedGame()->documentsDirectory().absolutePath();
-    iniPath += "/" + m_OrganizerCore.managedGame()->iniFiles()[0];
+    iniPath += "/" + iniFiles[0];
 
     wchar_t path[MAX_PATH];
     ::GetPrivateProfileStringW(
@@ -3355,42 +3400,6 @@ void MainWindow::refreshProfile_activated()
 	m_OrganizerCore.profileRefresh();
 }
 
-void MainWindow::search_activated()
-{
-  if (ui->modList->hasFocus() || ui->modFilterEdit->hasFocus()) {
-    ui->modFilterEdit->setFocus();
-    ui->modFilterEdit->setSelection(0, INT_MAX);
-  }
-
-  else if (ui->espList->hasFocus() || ui->espFilterEdit->hasFocus()) {
-    ui->espFilterEdit->setFocus();
-    ui->espFilterEdit->setSelection(0, INT_MAX);
-  }
-
-  else if (ui->downloadView->hasFocus() || ui->downloadFilterEdit->hasFocus()) {
-    ui->downloadFilterEdit->setFocus();
-    ui->downloadFilterEdit->setSelection(0, INT_MAX);
-  }
-}
-
-void MainWindow::searchClear_activated()
-{
-  if (ui->modList->hasFocus() || ui->modFilterEdit->hasFocus()) {
-    ui->modFilterEdit->clear();
-    ui->modList->setFocus();
-  }
-
-  else if (ui->espList->hasFocus() || ui->espFilterEdit->hasFocus()) {
-    ui->espFilterEdit->clear();
-    ui->espList->setFocus();
-  }
-
-  else if (ui->downloadView->hasFocus() || ui->downloadFilterEdit->hasFocus()) {
-    ui->downloadFilterEdit->clear();
-    ui->downloadView->setFocus();
-  }
-}
-
 void MainWindow::updateModCount()
 {
   int activeCount = 0;
@@ -3642,11 +3651,7 @@ void MainWindow::setColor_clicked()
   if (selection->hasSelection() && selection->selectedRows().count() > 1) {
     for (QModelIndex idx : selection->selectedRows()) {
       ModInfo::Ptr info = ModInfo::getByIndex(idx.data(Qt::UserRole + 1).toInt());
-      auto flags = info->getFlags();
-      if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_SEPARATOR) != flags.end())
-      {
-        info->setColor(currentColor);
-      }
+       info->setColor(currentColor);
     }
   }
   else {
@@ -3662,11 +3667,7 @@ void MainWindow::resetColor_clicked()
   if (selection->hasSelection() && selection->selectedRows().count() > 1) {
     for (QModelIndex idx : selection->selectedRows()) {
       ModInfo::Ptr info = ModInfo::getByIndex(idx.data(Qt::UserRole + 1).toInt());
-      auto flags = info->getFlags();
-      if (std::find(flags.begin(), flags.end(), ModInfo::FLAG_SEPARATOR) != flags.end())
-      {
-        info->setColor(color);
-      }
+       info->setColor(color);
     }
   }
   else {
@@ -4142,7 +4143,7 @@ void MainWindow::saveArchiveList()
     }
     archiveFile.commitIfDifferent(m_ArchiveListHash);
   } else {
-    log::warn("archive list not initialised");
+    log::debug("archive list not initialised");
   }
 }
 
@@ -4645,6 +4646,7 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
 
     m_ContextIdx = mapToModel(m_OrganizerCore.modList(), modList->indexAt(pos));
     m_ContextRow = m_ContextIdx.row();
+    int contextColumn = m_ContextIdx.column();
 
     if (m_ContextRow == -1) {
       // no selection
@@ -4766,6 +4768,15 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
         }
 
         menu.addSeparator();
+
+        if (contextColumn == ModList::COL_NOTES) {
+          menu.addAction(tr("Select Color..."), this, SLOT(setColor_clicked()));
+
+          if (info->getColor().isValid())
+            menu.addAction(tr("Reset Color"), this, SLOT(resetColor_clicked()));
+
+          menu.addSeparator();
+        }
 
         if (info->getNexusID() > 0 && Settings::instance().nexus().endorsementIntegration()) {
           switch (info->endorsedState()) {
