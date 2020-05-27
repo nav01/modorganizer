@@ -6,10 +6,9 @@
 #include <QApplication>
 #include <QDirIterator>
 
-ModInfoOverwrite::ModInfoOverwrite(PluginContainer *pluginContainer, MOShared::DirectoryEntry **directoryStructure) 
-  : ModInfoWithConflictInfo(pluginContainer, directoryStructure)
+ModInfoOverwrite::ModInfoOverwrite(PluginContainer *pluginContainer, const MOBase::IPluginGame *game, MOShared::DirectoryEntry **directoryStructure) 
+  : ModInfoWithConflictInfo(pluginContainer, game, directoryStructure)
 {
-  testValid();
 }
 
 bool ModInfoOverwrite::isEmpty() const

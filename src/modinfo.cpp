@@ -25,12 +25,11 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include "modinfooverwrite.h"
 #include "modinfoseparator.h"
 
-#include "installationtester.h"
 #include "categories.h"
 #include "modinfodialog.h"
 #include "overwriteinfodialog.h"
-#include "filenamestring.h"
 #include "versioninfo.h"
+#include "thread_utils.h"
 
 #include <iplugingame.h>
 #include <versioninfo.h>
@@ -99,11 +98,12 @@ ModInfo::Ptr ModInfo::createFromPlugin(const QString &modName,
                                        const QString &espName,
                                        const QStringList &bsaNames,
                                        ModInfo::EModType modType,
+                                       const MOBase::IPluginGame* game,
                                        DirectoryEntry **directoryStructure,
                                        PluginContainer *pluginContainer) {
   QMutexLocker locker(&s_Mutex);
   ModInfo::Ptr result = ModInfo::Ptr(
-      new ModInfoForeign(modName, espName, bsaNames, modType, directoryStructure, pluginContainer));
+      new ModInfoForeign(modName, espName, bsaNames, modType, game, directoryStructure, pluginContainer));
   s_Collection.push_back(result);
   return result;
 }
@@ -130,11 +130,12 @@ QString ModInfo::getContentTypeName(int contentType)
 }
 
 void ModInfo::createFromOverwrite(PluginContainer *pluginContainer,
+                                  const MOBase::IPluginGame* game,
                                   MOShared::DirectoryEntry **directoryStructure)
 {
   QMutexLocker locker(&s_Mutex);
 
-  s_Collection.push_back(ModInfo::Ptr(new ModInfoOverwrite(pluginContainer, directoryStructure)));
+  s_Collection.push_back(ModInfo::Ptr(new ModInfoOverwrite(pluginContainer, game, directoryStructure)));
 }
 
 unsigned int ModInfo::getNumMods()
@@ -249,6 +250,7 @@ void ModInfo::updateFromDisc(const QString &modDirectory,
                              DirectoryEntry **directoryStructure,
                              PluginContainer *pluginContainer,
                              bool displayForeign,
+                             std::size_t refreshThreadCount,
                              MOBase::IPluginGame const *game)
 {
   TimeThis tt("ModInfo::updateFromDisc()");
@@ -276,16 +278,20 @@ void ModInfo::updateFromDisc(const QString &modDirectory,
                        unmanaged->referenceFile(modName).absoluteFilePath(),
                        unmanaged->secondaryFiles(modName),
                        modType,
+                       game,
                        directoryStructure,
                        pluginContainer);
     }
   }
 
-  createFromOverwrite(pluginContainer, directoryStructure);
+  createFromOverwrite(pluginContainer, game, directoryStructure);
 
   std::sort(s_Collection.begin(), s_Collection.end(), ModInfo::ByName);
+  
+  parallelMap(std::begin(s_Collection), std::end(s_Collection), &ModInfo::prefetch, refreshThreadCount);
 
   updateIndices();
+
 }
 
 
@@ -305,7 +311,7 @@ void ModInfo::updateIndices()
 
 
 ModInfo::ModInfo(PluginContainer *pluginContainer)
-  : m_Valid(false), m_PrimaryCategory(-1)
+  : m_PrimaryCategory(-1)
 {
 }
 
@@ -475,7 +481,7 @@ bool ModInfo::removeCategory(const QString &categoryName)
   return true;
 }
 
-QStringList ModInfo::categories()
+QStringList ModInfo::categories() const
 {
   QStringList result;
 
@@ -525,32 +531,6 @@ bool ModInfo::categorySet(int categoryID) const
   }
 
   return false;
-}
-
-void ModInfo::testValid()
-{
-  m_Valid = false;
-  QDirIterator dirIter(absolutePath());
-  while (dirIter.hasNext()) {
-    dirIter.next();
-    if (dirIter.fileInfo().isDir()) {
-      if (InstallationTester::isTopLevelDirectory(dirIter.fileName())) {
-        m_Valid = true;
-        break;
-      }
-    } else {
-      if (InstallationTester::isTopLevelSuffix(dirIter.fileName())) {
-        m_Valid = true;
-        break;
-      }
-    }
-  }
-
-  // NOTE: in Qt 4.7 it seems that QDirIterator leaves a file handle open if it is not iterated to the
-  // end
-  while (dirIter.hasNext()) {
-    dirIter.next();
-  }
 }
 
 QUrl ModInfo::parseCustomURL() const

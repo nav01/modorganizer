@@ -27,6 +27,7 @@ add_filter(NAME src/browser GROUPS
 add_filter(NAME src/core GROUPS
 	categories
     categoriestable
+	archivefiletree
 	installationmanager
 	instancemanager
 	loadmechanism
@@ -36,6 +37,7 @@ add_filter(NAME src/core GROUPS
 	organizerproxy
 	apiuseraccount
 	processrunner
+	qdirfiletree
 	uilocker
 )
 
@@ -185,6 +187,7 @@ add_filter(NAME src/utilities GROUPS
 	shared/util
 	usvfsconnector
 	shared/windows_error
+	thread_utils
 	json
 )
 

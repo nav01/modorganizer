@@ -3063,8 +3063,6 @@ void MainWindow::ignoreMissingData_clicked()
     for (QModelIndex idx : selection->selectedRows()) {
       int row_idx = idx.data(Qt::UserRole + 1).toInt();
       ModInfo::Ptr info = ModInfo::getByIndex(row_idx);
-      //QDir(info->absolutePath()).mkdir("textures");
-      info->testValid();
       info->markValidated(true);
       connect(this, SIGNAL(modListDataChanged(QModelIndex, QModelIndex)), m_OrganizerCore.modList(), SIGNAL(dataChanged(QModelIndex, QModelIndex)));
 
@@ -3072,8 +3070,6 @@ void MainWindow::ignoreMissingData_clicked()
     }
   } else {
     ModInfo::Ptr info = ModInfo::getByIndex(m_ContextRow);
-    //QDir(info->absolutePath()).mkdir("textures");
-    info->testValid();
     info->markValidated(true);
     connect(this, SIGNAL(modListDataChanged(QModelIndex, QModelIndex)), m_OrganizerCore.modList(), SIGNAL(dataChanged(QModelIndex, QModelIndex)));
 
@@ -5932,7 +5928,8 @@ void MainWindow::refreshFilters()
 {
   QItemSelection currentSelection = ui->modList->selectionModel()->selection();
 
-  QVariant currentIndexName = ui->modList->currentIndex().data();
+  int idxRow = ui->modList->currentIndex().row();
+  QVariant currentIndexName = ui->modList->model()->index(idxRow, 0).data();
   ui->modList->setCurrentIndex(QModelIndex());
 
   m_Filters->refresh();
