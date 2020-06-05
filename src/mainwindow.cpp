@@ -311,7 +311,7 @@ MainWindow::MainWindow(Settings &settings
     ui->statusBar->setAPI(ni->getAPIStats(), ni->getAPIUserAccount());
   }
 
-  m_Filters.reset(new FilterList(ui, &m_PluginContainer, m_CategoryFactory));
+  m_Filters.reset(new FilterList(ui, &m_OrganizerCore, &m_PluginContainer, m_CategoryFactory));
 
   connect(
     m_Filters.get(), &FilterList::criteriaChanged,
@@ -5961,7 +5961,8 @@ void MainWindow::onFiltersCriteria(const std::vector<ModListSortProxy::Criteria>
     const auto& c = criteria[0];
 
     if (c.type == ModListSortProxy::TypeContent) {
-      label = ModInfo::getContentTypeName(c.id);
+      const auto *content = m_OrganizerCore.modDataContents().findById(c.id);
+      label = content ? content->name() : QString();
     } else {
       label = m_CategoryFactory->getCategoryNameByID(c.id);
     }

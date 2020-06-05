@@ -4,6 +4,7 @@
 #include "categoriesdialog.h"
 #include "plugincontainer.h"
 #include "settings.h"
+#include "organizercore.h"
 #include <utility.h>
 
 using namespace MOBase;
@@ -181,8 +182,8 @@ private:
 };
 
 
-FilterList::FilterList(Ui::MainWindow* ui, PluginContainer* pluginContainer, CategoryFactory* factory)
-  : ui(ui), m_factory(factory), m_pluginContainer(pluginContainer)
+FilterList::FilterList(Ui::MainWindow* ui, OrganizerCore* organizer, PluginContainer* pluginContainer, CategoryFactory* factory)
+  : ui(ui), m_Organizer(organizer), m_factory(factory), m_pluginContainer(pluginContainer)
 {
   auto* eventFilter = new CriteriaItemFilter(
     ui->filters, [&](auto* item, int dir){ return cycleItem(item, dir); });
@@ -234,12 +235,11 @@ QTreeWidgetItem* FilterList::addCriteriaItem(
 
 void FilterList::addContentCriteria()
 {
-  for (unsigned i = 0; i < ModInfo::NUM_CONTENT_TYPES; ++i) {
-    QString filterName = tr("Contains %1").arg(ModInfo::getContentTypeName(i));
+  m_Organizer->modDataContents().forEachContent([this](auto const& content) {
     addCriteriaItem(
-      nullptr, QString("<%1>").arg(filterName),
-      i, ModListSortProxy::TypeContent);
-  }
+      nullptr, QString("<%1>").arg(tr("Contains %1").arg(content.name())),
+      content.id(), ModListSortProxy::TypeContent);
+  }, true);
 }
 
 void FilterList::addCategoryCriteria(QTreeWidgetItem *root, const std::set<int> &categoriesUsed, int targetID)
