@@ -121,6 +121,7 @@ public:
    * This method cannot be used to extract directory.
    *
    * @param entry Entry corresponding to the file to extract.
+   * @param silent If true, the dialog showing extraction progress will not be shown.
    *
    * @return the absolute path to the temporary file.
    *
@@ -129,7 +130,7 @@ public:
    * @note The temporary file is automatically cleaned up after the installation.
    * @note This call can be very slow if the archive is large and "solid".
    */
-  virtual QString extractFile(std::shared_ptr<const MOBase::FileTreeEntry> entry) override;
+  virtual QString extractFile(std::shared_ptr<const MOBase::FileTreeEntry> entry, bool silent = false) override;
 
   /**
    * @brief Extract the specified files from the currently opened archive to a temporary location.
@@ -137,6 +138,7 @@ public:
    * This method cannot be used to extract directory.
    *
    * @param entres Entries corresponding to the files to extract.
+   * @param silent If true, the dialog showing extraction progress will not be shown.
    *
    * @return the list of absolute paths to the temporary files.
    *
@@ -151,7 +153,7 @@ public:
    * IFileTree and thus to given a list of entries flattened (this was not possible with the
    * QStringList version since these were based on the name of the file inside the archive).
    */
-  virtual QStringList extractFiles(std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> const& entries) override;
+  virtual QStringList extractFiles(std::vector<std::shared_ptr<const MOBase::FileTreeEntry>> const& entries, bool silent = false) override;
 
   /**
    * @brief Create a new file on the disk corresponding to the given entry.
@@ -189,14 +191,6 @@ public:
 
 private:
 
-  void queryPassword(QString *password);
-  void updateProgress(float percentage);
-  void updateProgressFile(const QString &fileName);
-  void report7ZipError(const QString &errorMessage);
-
-  // Recursive worker function for mapToArchive (takes raw reference for "speed").
-  bool unpackSingleFile(const QString &fileName);
-
   MOBase::IPluginInstaller::EInstallResult doInstall(MOBase::GuessedValue<QString> &modName, QString gameName,
                  int modID, const QString &version, const QString &newestVersion, int categoryID, int fileCategoryID, const QString &repository);
 
@@ -212,10 +206,29 @@ private:
 
   void postInstallCleanup();
 
+private slots:
+
+  /**
+   * @brief Query user for password and update the m_Password field.
+   */
+  void queryPassword();
+
 signals:
 
-  void progressUpdate(float percentage);
-  void progressUpdate(QString const fileName);
+  /**
+   * @brief Emitted when a password is requested from the archive wrapper.
+   */
+  void passwordRequested();
+
+  /**
+   * @brief Progress update from the extraction.
+   */
+  void progressUpdate(int percentage);
+
+  /**
+   * @brief File change update from the extraction.
+   */
+  void progressFileChange(QString const& value);
 
 private:
 
@@ -244,7 +257,7 @@ private:
    * @return true if the extraction was successful, false if the extraciton was
    *     cancelled. If an error occured, an exception is thrown.
    */
-  bool extractFiles(QDir extractPath);
+  bool extractFiles(QString extractPath, QString title, bool showFilenames, bool silent);
 
 private:
 
@@ -258,18 +271,14 @@ private:
   std::vector<MOBase::IPluginInstaller*> m_Installers;
   std::set<QString, CaseInsensitive> m_SupportedExtensions;
 
-  Archive *m_ArchiveHandler;
+  // Archive management:
+  std::unique_ptr<Archive> m_ArchiveHandler;
   QString m_CurrentFile;
-  QString m_ErrorMessage;
+  QString m_Password;
 
   // Map from entries in the tree that is used by the installer and absolute
   // paths to temporary files:
   std::map<std::shared_ptr<const MOBase::FileTreeEntry>, QString> m_CreatedFiles;
-
-  QProgressDialog *m_InstallationProgress { nullptr };
-  int m_Progress;
-  QString m_ProgressFile;
-
   std::set<QString> m_TempFilesToDelete;
 
   QString m_URL;

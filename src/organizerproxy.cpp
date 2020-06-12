@@ -3,7 +3,10 @@
 #include "shared/appconfig.h"
 #include "organizercore.h"
 #include "plugincontainer.h"
+#include "settings.h"
+#include "glob_matching.h"
 
+#include <QObject>
 #include <QApplication>
 
 using namespace MOBase;
@@ -11,10 +14,17 @@ using namespace MOShared;
 
 
 OrganizerProxy::OrganizerProxy(OrganizerCore *organizer, PluginContainer *pluginContainer, const QString &pluginName)
-  : m_Proxied(organizer)
+  : IOrganizer(organizer)
+  , m_Proxied(organizer)
   , m_PluginContainer(pluginContainer)
   , m_PluginName(pluginName)
 {
+
+  PluginSettings& pluginSettings = m_Proxied->settings().plugins();
+
+  connect(&pluginSettings, &PluginSettings::pluginSettingChanged, [this](auto const& ...args) {
+    emit pluginSettingChanged(args...);
+  });
 }
 
 IModRepositoryBridge *OrganizerProxy::createNexusBridge() const
@@ -206,6 +216,22 @@ QStringList OrganizerProxy::listDirectories(const QString &directoryName) const
 QStringList OrganizerProxy::findFiles(const QString &path, const std::function<bool(const QString&)> &filter) const
 {
   return m_Proxied->findFiles(path, filter);
+}
+
+QStringList OrganizerProxy::findFiles(const QString& path, const QStringList& globFilters) const
+{
+  QList<GlobPattern<QChar>> patterns;
+  for (auto& gfilter : globFilters) {
+    patterns.append(GlobPattern(gfilter));
+  }
+  return findFiles(path, [&patterns](const QString& filename) {
+    for (auto& p : patterns) {
+      if (p.match(filename)) {
+        return true;
+      }
+    }
+    return false;
+  });
 }
 
 QStringList OrganizerProxy::getFileOrigins(const QString &fileName) const

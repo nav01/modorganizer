@@ -862,9 +862,10 @@ QStringList OrganizerCore::findFiles(
     dir = dir->findSubDirectoryRecursive(ToWString(path));
   if (dir != nullptr) {
     std::vector<FileEntryPtr> files = dir->getFiles();
-    foreach (FileEntryPtr file, files) {
-      if (filter(ToQString(file->getFullPath()))) {
-        result.append(ToQString(file->getFullPath()));
+    for (FileEntryPtr &file: files) {
+      QString fullPath = ToQString(file->getFullPath());
+      if (filter(fullPath)) {
+        result.append(fullPath);
       }
     }
   }
@@ -1471,6 +1472,8 @@ void OrganizerCore::directory_refreshed()
     refreshLists();
   }
 
+  emit directoryStructureReady();
+
   log::debug("refresh done");
 }
 
@@ -1768,9 +1771,12 @@ bool OrganizerCore::beforeRun(
 {
   saveCurrentProfile();
 
-  while (m_DirectoryUpdate) {
-    ::Sleep(100);
-    QCoreApplication::processEvents();
+  // need to wait until directory structure is ready
+  if (m_DirectoryUpdate) {
+    QEventLoop loop;
+    connect(this, &OrganizerCore::directoryStructureReady, &loop, &QEventLoop::quit,
+      Qt::ConnectionType::QueuedConnection);
+    loop.exec();
   }
 
   // need to make sure all data is saved before we start the application
@@ -1838,10 +1844,12 @@ ProcessRunner::Results OrganizerCore::waitForAllUSVFSProcesses(
 std::vector<Mapping> OrganizerCore::fileMapping(const QString &profileName,
                                                 const QString &customOverwrite)
 {
-  // need to wait until directory structure
-  while (m_DirectoryUpdate) {
-    ::Sleep(100);
-    QCoreApplication::processEvents();
+  // need to wait until directory structure is ready
+  if (m_DirectoryUpdate) {
+    QEventLoop loop;
+    connect(this, &OrganizerCore::directoryStructureReady, &loop, &QEventLoop::quit,
+      Qt::ConnectionType::QueuedConnection);
+    loop.exec();
   }
 
   IPluginGame *game  = qApp->property("managed_game").value<IPluginGame *>();

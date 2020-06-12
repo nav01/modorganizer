@@ -184,6 +184,8 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <utility>
 
+#include "gameplugins.h"
+
 #ifdef TEST_MODELS
 #include "modeltest.h"
 #endif // TEST_MODELS
@@ -266,6 +268,8 @@ MainWindow::MainWindow(Settings &settings
   , m_LinkToolbar(nullptr)
   , m_LinkDesktop(nullptr)
   , m_LinkStartMenu(nullptr)
+  , m_NumberOfProblems(0)
+  , m_ProblemsCheckRequired(false)
 {
   // disables incredibly slow menu fade in effect that looks and feels like crap.
   // this was only happening to users with the windows
@@ -323,7 +327,6 @@ MainWindow::MainWindow(Settings &settings
 
   ui->logList->setCore(m_OrganizerCore);
 
-  updateProblemsButton();
 
   setupToolbar();
   toggleMO2EndorseState();
@@ -361,6 +364,15 @@ MainWindow::MainWindow(Settings &settings
   connect(
     m_DataTab.get(), &DataTab::displayModInformation,
     [&](auto&& m, auto&& i, auto&& tab){ displayModInformation(m, i, tab); });
+
+  // Hide stuff we do not need:
+  IPluginGame const* game = m_OrganizerCore.managedGame();
+  if (!game->feature<GamePlugins>()) {
+    ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->espTab));
+  }
+  if (!game->feature<DataArchives>()) {
+    ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->bsaTab));
+  }
 
   settings.geometry().restoreState(ui->downloadView->header());
 
@@ -400,7 +412,7 @@ MainWindow::MainWindow(Settings &settings
     ui->bossButton->setToolTip(tr("There is no supported sort mechanism for this game. You will probably have to use a third-party tool."));
   }
 
-  connect(&m_PluginContainer, SIGNAL(diagnosisUpdate()), this, SLOT(updateProblemsButton()));
+  connect(&m_PluginContainer, SIGNAL(diagnosisUpdate()), this, SLOT(scheduleCheckForProblems()));
 
   connect(ui->savegameList, SIGNAL(itemEntered(QListWidgetItem*)), this, SLOT(saveSelectionChanged(QListWidgetItem*)));
 
@@ -475,7 +487,8 @@ MainWindow::MainWindow(Settings &settings
   setFilterShortcuts(ui->downloadView, ui->downloadFilterEdit);
 
   m_UpdateProblemsTimer.setSingleShot(true);
-  connect(&m_UpdateProblemsTimer, SIGNAL(timeout()), this, SLOT(updateProblemsButton()));
+  connect(&m_UpdateProblemsTimer, &QTimer::timeout, this, &MainWindow::checkForProblemsAsync);
+  connect(this, &MainWindow::checkForProblemsDone, this, &MainWindow::updateProblemsButton, Qt::ConnectionType::QueuedConnection);
 
   m_SaveMetaTimer.setSingleShot(false);
   connect(&m_SaveMetaTimer, SIGNAL(timeout()), this, SLOT(saveModMetas()));
@@ -519,12 +532,14 @@ MainWindow::MainWindow(Settings &settings
 
   QApplication::instance()->installEventFilter(this);
 
+  scheduleCheckForProblems();
   refreshExecutablesList();
   updatePinnedExecutables();
   resetActionIcons();
   updatePluginCount();
   updateModCount();
   processUpdates();
+
   ui->statusBar->updateNormalMessage(m_OrganizerCore);
 }
 
@@ -1002,21 +1017,19 @@ void MainWindow::on_centralWidget_customContextMenuRequested(const QPoint &pos)
   createPopupMenu()->exec(ui->centralWidget->mapToGlobal(pos));
 }
 
-void MainWindow::scheduleUpdateButton()
+void MainWindow::scheduleCheckForProblems()
 {
   if (!m_UpdateProblemsTimer.isActive()) {
-    m_UpdateProblemsTimer.start(1000);
+    m_UpdateProblemsTimer.start(500);
   }
 }
 
 void MainWindow::updateProblemsButton()
 {
-  TimeThis tt("MainWindow::updateProblemsButton()");
-
   // if the current stylesheet doesn't provide an icon, this is used instead
   const char* DefaultIconName = ":/MO/gui/warning";
 
-  const std::size_t numProblems = checkForProblems();
+  const std::size_t numProblems = m_NumberOfProblems;
 
   // original icon without a count painted on it
   const QIcon original = m_originalNotificationIcon.isNull() ?
@@ -1099,19 +1112,34 @@ bool MainWindow::errorReported(QString &logFile)
   return false;
 }
 
+QFuture<void> MainWindow::checkForProblemsAsync() {
+  return QtConcurrent::run([this]() {
+    checkForProblemsImpl();
+    });
+}
 
-size_t MainWindow::checkForProblems()
+void MainWindow::checkForProblemsImpl()
 {
-  size_t numProblems = 0;
-  for (QObject *pluginObj : m_PluginContainer.plugins<QObject>()) {
-    IPlugin *plugin = qobject_cast<IPlugin*>(pluginObj);
-    if (plugin == nullptr || plugin->isActive()) {
-      IPluginDiagnose *diagnose = qobject_cast<IPluginDiagnose*>(pluginObj);
-      if (diagnose != nullptr)
-        numProblems += diagnose->activeProblems().size();
+  m_ProblemsCheckRequired = true;
+
+  std::scoped_lock lk(m_CheckForProblemsMutex);
+
+  // another thread might already have checked while this one was waiting on the lock
+  if (m_ProblemsCheckRequired) {
+    m_ProblemsCheckRequired = false;
+    TimeThis tt("MainWindow::checkForProblemsImpl()");
+    size_t numProblems = 0;
+    for (QObject *pluginObj : m_PluginContainer.plugins<QObject>()) {
+      IPlugin *plugin = qobject_cast<IPlugin*>(pluginObj);
+      if (plugin == nullptr || plugin->isActive()) {
+        IPluginDiagnose *diagnose = qobject_cast<IPluginDiagnose*>(pluginObj);
+        if (diagnose != nullptr)
+          numProblems += diagnose->activeProblems().size();
+      }
     }
+    m_NumberOfProblems = numProblems;
+    emit checkForProblemsDone();
   }
-  return numProblems;
 }
 
 void MainWindow::about()
@@ -1355,7 +1383,7 @@ void MainWindow::showEvent(QShowEvent *event)
 
     m_OrganizerCore.settings().nexus().registerAsNXMHandler(false);
     m_WasVisible = true;
-	  updateProblemsButton();
+    updateProblemsButton();
   }
 }
 
@@ -1839,7 +1867,7 @@ void MainWindow::refreshExecutablesList()
 
 void MainWindow::refreshSavesIfOpen()
 {
-  if (ui->tabWidget->currentIndex() == 3) {
+  if (ui->tabWidget->currentWidget() == ui->savesTab) {
     refreshSaveList();
   }
 }
@@ -2115,11 +2143,20 @@ void MainWindow::activateProxy(bool activate)
   busyDialog.setWindowFlags(busyDialog.windowFlags() & ~Qt::WindowContextHelpButtonHint);
   busyDialog.setWindowModality(Qt::WindowModal);
   busyDialog.show();
-  QFuture<void> future = QtConcurrent::run(MainWindow::setupNetworkProxy, activate);
-  while (!future.isFinished()) {
-    QCoreApplication::processEvents();
-    ::Sleep(100);
-  }
+  
+  QFutureWatcher<void> futureWatcher;
+  QEventLoop loop;
+  connect(&futureWatcher, &QFutureWatcher<void>::finished,
+          &loop, &QEventLoop::quit,
+          Qt::QueuedConnection);
+
+  futureWatcher.setFuture(
+    QtConcurrent::run(MainWindow::setupNetworkProxy, activate)
+  );
+  
+  // wait for setupNetworkProxy while keeping ui responsive
+  loop.exec();
+
   busyDialog.hide();
 }
 
@@ -2241,13 +2278,14 @@ void MainWindow::on_btnRefreshDownloads_clicked()
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
-  if (index == 0) {
+  QWidget* currentWidget = ui->tabWidget->widget(index);
+  if (currentWidget == ui->espTab) {
     m_OrganizerCore.refreshESPList();
-  } else if (index == 1) {
+  } else if (currentWidget == ui->bsaTab) {
     m_OrganizerCore.refreshBSAList();
-  } else if (index == 2) {
+  } else if (currentWidget == ui->dataTab) {
     m_DataTab->activated();
-  } else if (index == 3) {
+  } else if (currentWidget == ui->savesTab) {
     refreshSaveList();
   }
 }
@@ -2458,10 +2496,9 @@ void MainWindow::directory_refreshed()
 {
   // some problem-reports may rely on the virtual directory tree so they need to be updated
   // now
-  updateProblemsButton();
+  scheduleCheckForProblems();
 
-  //Some better check for the current tab is needed.
-  if (ui->tabWidget->currentIndex() == 2) {
+  if (ui->tabWidget->currentWidget() == ui->dataTab) {
     m_DataTab->updateTree();
   }
 }
@@ -3784,7 +3821,7 @@ void MainWindow::clearOverwrite()
       for (auto f : overwriteDir.entryList(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot))
         delList.push_back(overwriteDir.absoluteFilePath(f));
       if (shellDelete(delList, true)) {
-        updateProblemsButton();
+        scheduleCheckForProblems();
         m_OrganizerCore.refreshModList();
       } else {
         const auto e = GetLastError();
@@ -5164,7 +5201,6 @@ void MainWindow::languageChange(const QString &newLanguage)
   createHelpMenu();
 
   updateDownloadView();
-  updateProblemsButton();
 
   QMenu *listOptionsMenu = new QMenu(ui->listOptionsBtn);
   initModListContextMenu(listOptionsMenu);
@@ -5630,9 +5666,10 @@ void MainWindow::nxmModInfoAvailable(QString gameName, int modID, QVariant userD
       // with an older version than the main mod version.
       if (mod->getNexusFileStatus() != 3 && mod->getNexusFileStatus() != 5) {
         mod->setNewestVersion(result["version"].toString());
-        mod->setLastNexusUpdate(QDateTime::currentDateTimeUtc());
         foundUpdate = true;
       }
+      // update the LastNexusUpdate time in any case since we did perform the check.
+      mod->setLastNexusUpdate(QDateTime::currentDateTimeUtc());
     }
     mod->setNexusDescription(result["description"].toString());
     if ((mod->endorsedState() != ModInfo::ENDORSED_NEVER) && (result.contains("endorsement"))) {
@@ -5762,6 +5799,20 @@ void MainWindow::nxmRequestFailed(QString gameName, int modID, int, QVariant, in
 {
   if (error == QNetworkReply::ContentAccessDenied || error == QNetworkReply::ContentNotFoundError) {
     log::debug("{}", tr("Mod ID %1 no longer seems to be available on Nexus.").arg(modID));
+    
+    // update last checked timestamp on orphaned mods as well to avoid repeating requests
+    QString gameNameReal;
+    for (IPluginGame* game : m_PluginContainer.plugins<IPluginGame>()) {
+      if (game->gameNexusName() == gameName) {
+        gameNameReal = game->gameShortName();
+        break;
+      }
+    }
+    auto orphanedMods = ModInfo::getByModID(gameNameReal, modID);
+    for (auto mod : orphanedMods) {
+      mod->setLastNexusUpdate(QDateTime::currentDateTimeUtc());
+      mod->setLastNexusQuery(QDateTime::currentDateTimeUtc());
+    }
   } else {
     MessageDialog::showMessage(tr("Request to Nexus failed: %1").arg(errorString), this);
   }
@@ -5879,12 +5930,14 @@ void MainWindow::on_bsaList_itemChanged(QTreeWidgetItem*, int)
 
 void MainWindow::on_actionNotifications_triggered()
 {
-  updateProblemsButton();
+  auto future = checkForProblemsAsync();
+
+  future.waitForFinished();
 
   ProblemsDialog problems(m_PluginContainer.plugins<QObject>(), this);
   problems.exec();
 
-  updateProblemsButton();
+  scheduleCheckForProblems();
 }
 
 void MainWindow::on_actionChange_Game_triggered()
