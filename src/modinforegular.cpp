@@ -173,6 +173,7 @@ void ModInfoRegular::readMeta()
         case ENDORSED_FALSE: m_EndorsedState = ENDORSED_FALSE; break;
         case ENDORSED_TRUE:  m_EndorsedState = ENDORSED_TRUE;  break;
         case ENDORSED_NEVER: m_EndorsedState = ENDORSED_NEVER; break;
+        case ENDORSED_CANNOT_ENDORSE: m_EndorsedState = ENDORSED_CANNOT_ENDORSE; break;
         default: m_EndorsedState = ENDORSED_UNKNOWN; break;
       }
     } else {
@@ -317,7 +318,16 @@ void ModInfoRegular::nxmDescriptionAvailable(QString, int, QVariant, QVariant re
 void ModInfoRegular::nxmEndorsementToggled(QString, int, QVariant, QVariant resultData)
 {
   QMap results = resultData.toMap();
-  if (results["status"].toString().compare("Endorsed") == 0) {
+  if (results["status"].toString().compare("Error") == 0) {
+    QString endorseErrorMessage = results["message"].toString();
+    QString displayError = endorseErrorMessage;
+    if (endorseErrorMessage.compare("ENDORSING_NOT_ALLOWED") == 0) {
+      m_EndorsedState = ENDORSED_CANNOT_ENDORSE;
+      displayError = "mod author has disabled endorsements on this mod";
+    } else if (endorseErrorMessage.compare("TOO_SOON_AFTER_DOWNLOAD") == 0)
+      displayError = "attempting to endorse too soon after download";
+    log::error("Error rating {}: {}", m_Name, displayError);
+  } else if (results["status"].toString().compare("Endorsed") == 0) {
     m_EndorsedState = ENDORSED_TRUE;
   } else if (results["status"].toString().compare("Abstained") == 0) {
     m_EndorsedState = ENDORSED_NEVER;
@@ -541,6 +551,12 @@ void ModInfoRegular::setNeverEndorse()
   m_MetaInfoChanged = true;
 }
 
+void ModInfoRegular::setCannotEndorse()
+{
+  m_EndorsedState = ENDORSED_CANNOT_ENDORSE;
+  m_MetaInfoChanged = true;
+}
+
 void ModInfoRegular::setIsTracked(bool tracked)
 {
   if (tracked != (m_TrackedState == TRACKED_TRUE)) {
@@ -568,7 +584,7 @@ bool ModInfoRegular::remove()
 
 void ModInfoRegular::endorse(bool doEndorse)
 {
-  if (doEndorse != (m_EndorsedState == ENDORSED_TRUE)) {
+  if ((m_EndorsedState != ENDORSED_CANNOT_ENDORSE) && doEndorse != (m_EndorsedState == ENDORSED_TRUE)) {
     m_NexusBridge.requestToggleEndorsement(m_GameName, getNexusID(), m_Version.canonicalString(), doEndorse, QVariant(1));
   }
 }

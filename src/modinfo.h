@@ -99,7 +99,8 @@ public:
     ENDORSED_FALSE,
     ENDORSED_TRUE,
     ENDORSED_UNKNOWN,
-    ENDORSED_NEVER
+    ENDORSED_NEVER,
+    ENDORSED_CANNOT_ENDORSE,
   };
 
   enum ETrackedState {
@@ -384,6 +385,11 @@ public:
    * set the mod to "i don't intend to endorse". The mod will not show as unendorsed but can still be endorsed
    */
   virtual void setNeverEndorse() = 0;
+
+  /**
+   * set the mod to "cannot be rated".  Mod authors can designate their mod as not able to be rated on nexus.
+  */
+  virtual void setCannotEndorse() = 0;
 
   /**
    * update the tracked state for the mod.  This only changes the

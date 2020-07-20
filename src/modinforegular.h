@@ -180,6 +180,11 @@ public:
   virtual void setNeverEndorse() override;
 
   /**
+   * set the mod to "cannot be rated".  Mod authors can designate their mod as not able to be rated on nexus.
+  */
+  virtual void setCannotEndorse() override;
+
+  /**
    * update the tracked state for the mod.  This only changes the
    * buffered state.  It does not sync with Nexus
    * @param tracked the new tracked state

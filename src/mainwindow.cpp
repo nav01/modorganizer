@@ -4821,10 +4821,15 @@ void MainWindow::on_modList_customContextMenuRequested(const QPoint &pos)
             } break;
             case ModInfo::ENDORSED_FALSE: {
               menu.addAction(tr("Endorse"), this, SLOT(endorse_clicked()));
-              menu.addAction(tr("Won't endorse"), this, SLOT(dontendorse_clicked()));
+              menu.addAction(tr("Won't Endorse"), this, SLOT(dontendorse_clicked()));
             } break;
             case ModInfo::ENDORSED_NEVER: {
               menu.addAction(tr("Endorse"), this, SLOT(endorse_clicked()));
+            } break;
+            case ModInfo::ENDORSED_CANNOT_ENDORSE: {
+              QAction* action = new QAction(tr("Cannot Endorse"), &menu);
+              action->setEnabled(false);
+              menu.addAction(action);
             } break;
             default: {
               QAction *action = new QAction(tr("Endorsement state unknown"), &menu);
@@ -5652,6 +5657,7 @@ void MainWindow::nxmModInfoAvailable(QString gameName, int modID, QVariant userD
       break;
     }
   }
+
   std::vector<ModInfo::Ptr> modsList = ModInfo::getByModID(gameNameReal, modID);
   for (auto mod : modsList) {
     QDateTime now = QDateTime::currentDateTimeUtc();
@@ -5667,7 +5673,9 @@ void MainWindow::nxmModInfoAvailable(QString gameName, int modID, QVariant userD
       mod->setLastNexusUpdate(QDateTime::currentDateTimeUtc());
     }
     mod->setNexusDescription(result["description"].toString());
-    if ((mod->endorsedState() != ModInfo::ENDORSED_NEVER) && (result.contains("endorsement"))) {
+    if (!result["allow_rating"].toBool())
+      mod->setCannotEndorse();
+    else if ((mod->endorsedState() != ModInfo::ENDORSED_NEVER) && (result.contains("endorsement"))) {
       QVariantMap endorsement = result["endorsement"].toMap();
       QString endorsementStatus = endorsement["endorse_status"].toString();
       if (endorsementStatus.compare("Endorsed") == 00)
@@ -5812,7 +5820,6 @@ void MainWindow::nxmRequestFailed(QString gameName, int modID, int, QVariant, in
     MessageDialog::showMessage(tr("Request to Nexus failed: %1").arg(errorString), this);
   }
 }
-
 
 BSA::EErrorCode MainWindow::extractBSA(BSA::Archive &archive, BSA::Folder::Ptr folder, const QString &destination,
                            QProgressDialog &progress)

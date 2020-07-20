@@ -857,6 +857,15 @@ void NexusInterface::requestFinished(std::list<NXMRequestInfo>::iterator iter)
 
       emit requestsChanged(getAPIStats(), m_User);
       log::warn("Error: {}", reply->errorString());
+    } else if (statusCode == 403 && iter->m_Type == NXMRequestInfo::TYPE_TOGGLEENDORSEMENT) {
+      QByteArray data = reply->readAll();
+      if (!data.isNull() || !data.isEmpty() || !(strcmp(data.constData(), "null") == 0)) {
+        QJsonDocument responseDoc = QJsonDocument::fromJson(data);
+        if (!responseDoc.isNull()) {
+          QVariant result = responseDoc.toVariant();
+          emit nxmEndorsementToggled(iter->m_GameName, iter->m_ModID, iter->m_UserData, result, iter->m_ID);
+        }
+      }
     } else {
       log::warn("request failed: {}", reply->errorString());
     }

@@ -31,6 +31,7 @@ public:
   virtual void addNexusCategory(int) override {}
   virtual void setIsEndorsed(bool) override {}
   virtual void setNeverEndorse() override {}
+  virtual void setCannotEndorse() override {}
   virtual void setIsTracked(bool) override {}
   virtual bool remove() override { return false; }
   virtual void endorse(bool) override {}
