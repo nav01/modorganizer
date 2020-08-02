@@ -31,6 +31,21 @@ along with Mod Organizer.  If not, see <http://www.gnu.org/licenses/>.
 using namespace MOBase;
 
 
+ModFilesSettings::ModFilesSettings(QSettings& settings): m_Settings(settings)
+{
+}
+
+bool ModFilesSettings::useRecycleBinForDeletes() const
+{
+  return get<bool>(m_Settings, "General", "removed_mod_files_to_recycle_bin", true);
+}
+
+void ModFilesSettings::setUseRecycleBinForDeletes(bool b)
+{
+   set(m_Settings, "General", "removed_mod_files_to_recycle_bin", b);
+}
+;
+
 EndorsementState endorsementStateFromString(const QString& s)
 {
   if (s == "Endorsed") {
@@ -66,7 +81,7 @@ Settings::Settings(const QString& path) :
   m_Game(m_Settings), m_Geometry(m_Settings), m_Widgets(m_Settings),
   m_Colors(m_Settings), m_Plugins(m_Settings), m_Paths(m_Settings),
   m_Network(m_Settings), m_Nexus(*this, m_Settings), m_Steam(*this, m_Settings),
-  m_Interface(m_Settings), m_Diagnostics(m_Settings)
+  m_Interface(m_Settings), m_Diagnostics(m_Settings), m_ModFiles(m_Settings)
 {
   if (s_Instance != nullptr) {
     throw std::runtime_error("second instance of \"Settings\" created");
@@ -452,6 +467,16 @@ DiagnosticsSettings& Settings::diagnostics()
 const DiagnosticsSettings& Settings::diagnostics() const
 {
   return m_Diagnostics;
+}
+
+ModFilesSettings& Settings::modFiles()
+{
+  return m_ModFiles;
+}
+
+const ModFilesSettings& Settings::modFiles() const
+{
+  return m_ModFiles;
 }
 
 QSettings::Status Settings::sync() const

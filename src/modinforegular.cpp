@@ -563,7 +563,7 @@ QColor ModInfoRegular::getColor() const
 bool ModInfoRegular::remove()
 {
   m_MetaInfoChanged = false;
-  return shellDelete(QStringList(absolutePath()), true);
+  return shellDelete(QStringList(absolutePath()), Settings::instance().modFiles().useRecycleBinForDeletes());
 }
 
 void ModInfoRegular::endorse(bool doEndorse)

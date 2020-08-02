@@ -42,7 +42,18 @@ class QSplitter;
 class ServerList;
 class Settings;
 
+// settings for what to do with removed mod installations and deleted mod downloads
+class ModFilesSettings 
+{
+public:
+  ModFilesSettings(QSettings& s);
 
+  bool useRecycleBinForDeletes() const;
+  void setUseRecycleBinForDeletes(bool b);
+
+private:
+  QSettings& m_Settings;
+};
 
 // setting for the currently managed game
 //
@@ -778,6 +789,9 @@ public:
   DiagnosticsSettings& diagnostics();
   const DiagnosticsSettings& diagnostics() const;
 
+  ModFilesSettings& modFiles();
+  const ModFilesSettings& modFiles() const;
+
   // makes sure the ini file is written to disk
   //
   QSettings::Status sync() const;
@@ -810,6 +824,7 @@ private:
   SteamSettings m_Steam;
   InterfaceSettings m_Interface;
   DiagnosticsSettings m_Diagnostics;
+  ModFilesSettings m_ModFiles;
 };
 
 

@@ -3823,7 +3823,7 @@ void MainWindow::clearOverwrite()
       QStringList delList;
       for (auto f : overwriteDir.entryList(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot))
         delList.push_back(overwriteDir.absoluteFilePath(f));
-      if (shellDelete(delList, true)) {
+      if (shellDelete(delList, Settings::instance().modFiles().useRecycleBinForDeletes())) {
         scheduleCheckForProblems();
         m_OrganizerCore.refreshModList();
       } else {

@@ -357,7 +357,7 @@ void DownloadManager::refreshList()
     }
     if (orphans.size() > 0) {
       log::debug("{} orphaned meta files will be deleted", orphans.size());
-      shellDelete(orphans, true);
+      shellDelete(orphans, Settings::instance().modFiles().useRecycleBinForDeletes());
     }
 
     // add existing downloads to list
@@ -679,14 +679,14 @@ void DownloadManager::removeFile(int index, bool deleteFile)
   }
 
   if (deleteFile) {
-    if (!shellDelete(QStringList(filePath), true)) {
+    if (!shellDelete(QStringList(filePath), Settings::instance().modFiles().useRecycleBinForDeletes())) {
       reportError(tr("failed to delete %1").arg(filePath));
       endDisableDirWatcher();
       return;
     }
 
     QFile metaFile(filePath.append(".meta"));
-    if (metaFile.exists() && !shellDelete(QStringList(filePath), true)) {
+    if (metaFile.exists() && !shellDelete(QStringList(filePath), Settings::instance().modFiles().useRecycleBinForDeletes())) {
       reportError(tr("failed to delete meta file for %1").arg(filePath));
     }
   } else {

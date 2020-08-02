@@ -27,6 +27,7 @@ GeneralSettingsTab::GeneralSettingsTab(Settings& s, SettingsDialog& d)
   ui->checkForUpdates->setChecked(settings().checkForUpdates());
   ui->usePrereleaseBox->setChecked(settings().usePrereleases());
   ui->colorSeparatorsBox->setChecked(settings().colors().colorSeparatorScrollbar());
+  ui->useRecycleBin->setChecked(settings().modFiles().useRecycleBinForDeletes());
 
   QObject::connect(ui->exploreStyles, &QPushButton::clicked, [&]{ onExploreStyles(); });
 
@@ -70,6 +71,7 @@ void GeneralSettingsTab::update()
   settings().setCheckForUpdates(ui->checkForUpdates->isChecked());
   settings().setUsePrereleases(ui->usePrereleaseBox->isChecked());
   settings().colors().setColorSeparatorScrollbar(ui->colorSeparatorsBox->isChecked());
+  settings().modFiles().setUseRecycleBinForDeletes(ui->useRecycleBin->isChecked());
 }
 
 void GeneralSettingsTab::addLanguages()

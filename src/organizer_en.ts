@@ -1761,14 +1761,14 @@ Right now the only case I know of where this needs to be overwritten is for the 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="installationmanager.cpp" line="284"/>
-        <source>Extracting files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="installationmanager.cpp" line="245"/>
         <location filename="installationmanager.cpp" line="252"/>
         <source>Extraction failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="installationmanager.cpp" line="284"/>
+        <source>Extracting files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2317,6 +2317,35 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="mainwindow.ui" line="834"/>
+        <location filename="mainwindow.ui" line="837"/>
+        <source>Restore a backup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="857"/>
+        <location filename="mainwindow.ui" line="860"/>
+        <source>Create a backup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="887"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This provides statistics about the plugin list. The total number of active plugins is normally displayed.  Other statistics may be accessed with the tooltip of this counter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="914"/>
+        <location filename="mainwindow.ui" line="917"/>
+        <source>List of available esp/esm files.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="981"/>
+        <location filename="mainwindow.ui" line="984"/>
+        <source>Filter the list of plugins.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="mainwindow.ui" line="1003"/>
         <location filename="mainwindow.ui" line="1169"/>
         <source>Archives</source>
@@ -2351,6 +2380,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="mainwindow.ui" line="1087"/>
+        <location filename="mainwindow.ui" line="1090"/>
+        <source>Refresh the data structure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="mainwindow.ui" line="1093"/>
         <location filename="mainwindow.ui" line="1259"/>
         <location filename="mainwindow.cpp" line="4643"/>
@@ -2360,67 +2395,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="mainwindow.ui" line="1124"/>
         <source>This is an overview of your data directory as visible to the game (and tools). </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="1189"/>
-        <source>Saves</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="1210"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;This is a list of all save games for this game. Hover over a list entry to get detailed information about the save including a list of esps/esms that were used at the time this save was created but aren&apos;t active now.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;If you click &amp;quot;Fix Mods...&amp;quot; in the context menu, MO will try to activate all mods and esps to fix those missing esps. It will not disable anything!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="1236"/>
-        <source>Downloads</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="1302"/>
-        <source>This is a list of mods you downloaded from Nexus. Double click one to install it. You can also drag an archive into here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="834"/>
-        <location filename="mainwindow.ui" line="837"/>
-        <source>Restore a backup.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="857"/>
-        <location filename="mainwindow.ui" line="860"/>
-        <source>Create a backup.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="887"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This provides statistics about the plugin list. The total number of active plugins is normally displayed.  Other statistics may be accessed with the tooltip of this counter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="914"/>
-        <location filename="mainwindow.ui" line="917"/>
-        <source>List of available esp/esm files.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="981"/>
-        <location filename="mainwindow.ui" line="984"/>
-        <source>Filter the list of plugins.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="1087"/>
-        <location filename="mainwindow.ui" line="1090"/>
-        <source>Refresh the data structure.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2447,9 +2421,35 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="mainwindow.ui" line="1189"/>
+        <source>Saves</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1210"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;This is a list of all save games for this game. Hover over a list entry to get detailed information about the save including a list of esps/esms that were used at the time this save was created but aren&apos;t active now.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;If you click &amp;quot;Fix Mods...&amp;quot; in the context menu, MO will try to activate all mods and esps to fix those missing esps. It will not disable anything!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1236"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="mainwindow.ui" line="1253"/>
         <location filename="mainwindow.ui" line="1256"/>
         <source>Refresh the downloads.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1302"/>
+        <source>This is a list of mods you downloaded from Nexus. Double click one to install it. You can also drag an archive into here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5721,6 +5721,11 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../uibase/src/utility.cpp" line="924"/>
+        <source>%1 KB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../uibase/src/utility.cpp" line="925"/>
         <source>%1 MB</source>
         <translation type="unfinished"></translation>
@@ -5736,21 +5741,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../uibase/src/utility.cpp" line="937"/>
-        <source>%1 GB/s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../uibase/src/utility.cpp" line="938"/>
-        <source>%1 TB/s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../uibase/src/utility.cpp" line="924"/>
-        <source>%1 KB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../uibase/src/utility.cpp" line="934"/>
         <source>%1 B/s</source>
         <translation type="unfinished"></translation>
@@ -5763,6 +5753,16 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../uibase/src/utility.cpp" line="936"/>
         <source>%1 MB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../uibase/src/utility.cpp" line="937"/>
+        <source>%1 GB/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../uibase/src/utility.cpp" line="938"/>
+        <source>%1 TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5925,6 +5925,16 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="envshell.cpp" line="342"/>
+        <source>No menu available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="envshell.cpp" line="385"/>
+        <source>Selected files must be in the same directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="filerenamer.cpp" line="111"/>
         <source>The hidden file &quot;%1&quot; already exists. Replace it?</source>
         <translation type="unfinished"></translation>
@@ -5959,6 +5969,11 @@ Source:<byte value="xd"/>
 <byte value="xd"/>
 Destination:<byte value="xd"/>
 &quot;%3&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="filetree.cpp" line="113"/>
+        <source>Disabled because</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6197,7 +6212,6 @@ If the folder was still in use, restart MO and try again.</source>
     <message>
         <location filename="main.cpp" line="302"/>
         <source>Plugin to handle %1 no longer installed. An antivirus might have deleted files.</source>
-        <oldsource>Plugin to handle %1 no longer installed</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6485,19 +6499,19 @@ If the folder was still in use, restart MO and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="1309"/>
         <location filename="settings.cpp" line="1334"/>
-        <location filename="settings.cpp" line="1382"/>
+        <location filename="settings.cpp" line="1359"/>
+        <location filename="settings.cpp" line="1407"/>
         <source>attempt to store setting for unknown plugin &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="1866"/>
+        <location filename="settings.cpp" line="1891"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="1867"/>
+        <location filename="settings.cpp" line="1892"/>
         <source>Failed to start the helper application: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6534,12 +6548,12 @@ If the folder was still in use, restart MO and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialoggeneral.cpp" line="206"/>
+        <location filename="settingsdialoggeneral.cpp" line="208"/>
         <source>Confirm?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialoggeneral.cpp" line="207"/>
+        <location filename="settingsdialoggeneral.cpp" line="209"/>
         <source>This will reset all the choices you made to dialogs and make them all visible again. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6690,16 +6704,6 @@ Example:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shared/originconnection.cpp" line="86"/>
-        <source>invalid origin name: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="shared/originconnection.cpp" line="115"/>
-        <source>failed to change name lookup from {} to {}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="shared/directoryentry.cpp" line="411"/>
         <source>unexpected end of path</source>
         <translation type="unfinished"></translation>
@@ -6712,6 +6716,16 @@ Example:
     <message>
         <location filename="shared/fileregister.cpp" line="99"/>
         <source>invalid file index for remove (for origin): {}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="shared/originconnection.cpp" line="86"/>
+        <source>invalid origin name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="shared/originconnection.cpp" line="115"/>
+        <source>failed to change name lookup from {} to {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6946,7 +6960,6 @@ You can restart Mod Organizer as administrator and try launching the program aga
     <message>
         <location filename="uilocker.cpp" line="323"/>
         <source>Mod Organizer is waiting on an application to close before exiting.</source>
-        <oldsource>Mod Organizer is waiting on application to close before exiting.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6957,21 +6970,6 @@ You can restart Mod Organizer as administrator and try launching the program aga
     <message>
         <location filename="uilocker.cpp" line="354"/>
         <source>Exit Now</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="envshell.cpp" line="342"/>
-        <source>No menu available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="envshell.cpp" line="385"/>
-        <source>Selected files must be in the same directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="filetree.cpp" line="113"/>
-        <source>Disabled because</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7332,317 +7330,333 @@ Select Show Details option to see the full change-log.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="396"/>
+        <location filename="settingsdialog.ui" line="395"/>
+        <source>Mod Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="401"/>
+        <source>Applies to removing mod installations, deleting downloads, and clearing overwrite folder.
+Does NOT apply to files deleted due to a merge or replaced mods.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="405"/>
+        <source>Use recycle bin for deleted mod installations and downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="416"/>
         <source>Paths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="404"/>
-        <location filename="settingsdialog.ui" line="421"/>
-        <location filename="settingsdialog.ui" line="518"/>
-        <location filename="settingsdialog.ui" line="576"/>
+        <location filename="settingsdialog.ui" line="424"/>
+        <location filename="settingsdialog.ui" line="441"/>
+        <location filename="settingsdialog.ui" line="538"/>
+        <location filename="settingsdialog.ui" line="596"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="431"/>
+        <location filename="settingsdialog.ui" line="451"/>
         <source>Caches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="438"/>
+        <location filename="settingsdialog.ui" line="458"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="445"/>
-        <location filename="settingsdialog.ui" line="448"/>
+        <location filename="settingsdialog.ui" line="465"/>
+        <location filename="settingsdialog.ui" line="468"/>
         <source>Directory where downloads are stored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="465"/>
+        <location filename="settingsdialog.ui" line="485"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="485"/>
+        <location filename="settingsdialog.ui" line="505"/>
         <source>Profiles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="508"/>
+        <location filename="settingsdialog.ui" line="528"/>
         <source>Directory where mods are stored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="511"/>
+        <location filename="settingsdialog.ui" line="531"/>
         <source>Directory where mods are stored. Please note that changing this will break all associations of profiles with mods that don&apos;t exist in the new location (with the same name).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="535"/>
+        <location filename="settingsdialog.ui" line="555"/>
         <source>Mods</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="555"/>
+        <location filename="settingsdialog.ui" line="575"/>
         <source>Managed Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="562"/>
+        <location filename="settingsdialog.ui" line="582"/>
         <source>Base Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="569"/>
+        <location filename="settingsdialog.ui" line="589"/>
         <source>Use %BASE_DIR% to refer to the Base Directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="598"/>
+        <location filename="settingsdialog.ui" line="618"/>
         <source>Important: All directories have to be writable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="606"/>
+        <location filename="settingsdialog.ui" line="626"/>
         <source>Nexus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="627"/>
+        <location filename="settingsdialog.ui" line="647"/>
         <source>Nexus Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="636"/>
+        <location filename="settingsdialog.ui" line="656"/>
         <source>User ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="646"/>
+        <location filename="settingsdialog.ui" line="666"/>
         <source>id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="653"/>
+        <location filename="settingsdialog.ui" line="673"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="660"/>
+        <location filename="settingsdialog.ui" line="680"/>
         <source>name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="667"/>
+        <location filename="settingsdialog.ui" line="687"/>
         <source>Account:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="674"/>
+        <location filename="settingsdialog.ui" line="694"/>
         <source>account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="684"/>
+        <location filename="settingsdialog.ui" line="704"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="693"/>
+        <location filename="settingsdialog.ui" line="713"/>
         <source>Daily requests:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="700"/>
+        <location filename="settingsdialog.ui" line="720"/>
         <source>daily requests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="707"/>
+        <location filename="settingsdialog.ui" line="727"/>
         <source>Hourly requests:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="714"/>
+        <location filename="settingsdialog.ui" line="734"/>
         <source>hourly requests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="727"/>
+        <location filename="settingsdialog.ui" line="747"/>
         <source>Nexus Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="748"/>
+        <location filename="settingsdialog.ui" line="768"/>
         <source>Connect to Nexus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="755"/>
+        <location filename="settingsdialog.ui" line="775"/>
         <source>Manually enter the API key and try to login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="758"/>
+        <location filename="settingsdialog.ui" line="778"/>
         <source>Enter API Key Manually</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="765"/>
+        <location filename="settingsdialog.ui" line="785"/>
         <source>Clear the stored Nexus API key and force reauthorization.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="768"/>
+        <location filename="settingsdialog.ui" line="788"/>
         <source>Disconnect from Nexus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="843"/>
+        <location filename="settingsdialog.ui" line="863"/>
         <source>Disable automatic internet features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="846"/>
+        <location filename="settingsdialog.ui" line="866"/>
         <source>Disable automatic internet features. This does not affect features that are explicitly invoked by the user (like checking mods for updates, endorsing, opening the web browser)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="849"/>
+        <location filename="settingsdialog.ui" line="869"/>
         <source>Offline Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="856"/>
+        <location filename="settingsdialog.ui" line="876"/>
         <source>Use a proxy for network connections.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="859"/>
+        <location filename="settingsdialog.ui" line="879"/>
         <source>Use a proxy for network connections. This uses the system-wide settings which can be configured in Internet Explorer. Please note that MO will start up a few seconds slower on some systems when using a proxy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="862"/>
+        <location filename="settingsdialog.ui" line="882"/>
         <source>Use HTTP Proxy (Uses System Settings)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="869"/>
+        <location filename="settingsdialog.ui" line="889"/>
         <source>Endorsement Integration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="879"/>
-        <location filename="settingsdialog.ui" line="882"/>
+        <location filename="settingsdialog.ui" line="899"/>
+        <location filename="settingsdialog.ui" line="902"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;By default, a counter is displayed in the bottom right corner.  This informs the user of their remaining API requests.  The Nexus API becomes unusable once these API requests run out.  Checking this option will hide that counter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="885"/>
+        <location filename="settingsdialog.ui" line="905"/>
         <source>Hide API Request Counter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="896"/>
+        <location filename="settingsdialog.ui" line="916"/>
         <source>Associate with &quot;Download with manager&quot; links</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="903"/>
+        <location filename="settingsdialog.ui" line="923"/>
         <source>Remove cache and cookies.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="906"/>
+        <location filename="settingsdialog.ui" line="926"/>
         <source>Clear Cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="939"/>
+        <location filename="settingsdialog.ui" line="959"/>
         <source>Known Servers (updated on download)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="960"/>
+        <location filename="settingsdialog.ui" line="980"/>
         <source>Preferred Servers (Drag &amp; Drop)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="982"/>
+        <location filename="settingsdialog.ui" line="1002"/>
         <source>Steam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="988"/>
+        <location filename="settingsdialog.ui" line="1008"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1014"/>
+        <location filename="settingsdialog.ui" line="1034"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you save your steam user ID and password here, they will be used when logging into steam.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1024"/>
+        <location filename="settingsdialog.ui" line="1044"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1039"/>
+        <location filename="settingsdialog.ui" line="1059"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1064"/>
+        <location filename="settingsdialog.ui" line="1084"/>
         <source>Author:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1078"/>
+        <location filename="settingsdialog.ui" line="1098"/>
         <source>Version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1092"/>
+        <location filename="settingsdialog.ui" line="1112"/>
         <source>Description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1130"/>
+        <location filename="settingsdialog.ui" line="1150"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1135"/>
+        <location filename="settingsdialog.ui" line="1155"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1147"/>
+        <location filename="settingsdialog.ui" line="1167"/>
         <source>Blacklisted Plugins (use &lt;del&gt; to remove):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1158"/>
+        <location filename="settingsdialog.ui" line="1178"/>
         <source>Workarounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1166"/>
+        <location filename="settingsdialog.ui" line="1186"/>
         <source>Steam App ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1186"/>
+        <location filename="settingsdialog.ui" line="1206"/>
         <source>The Steam AppID for your game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1189"/>
+        <location filename="settingsdialog.ui" line="1209"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -7658,17 +7672,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1220"/>
+        <location filename="settingsdialog.ui" line="1240"/>
         <source>Load Mechanism</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1240"/>
+        <location filename="settingsdialog.ui" line="1260"/>
         <source>Select loading mechanism. See help for details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1243"/>
+        <location filename="settingsdialog.ui" line="1263"/>
         <source>Mod Organizer needs a dll to be injected into the game so all mods are visible to it.
 There are several means to do this:
 *Mod Organizer* (default) In this mode the Mod Organizer itself injects the dll. The disadvantage is that you always have to start the game through MO or a link created by it.
@@ -7679,28 +7693,28 @@ If you use the Steam version of Oblivion the default will NOT work. In this case
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1263"/>
+        <location filename="settingsdialog.ui" line="1283"/>
         <source>Enforces that inactive ESPs and ESMs are never loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1266"/>
+        <location filename="settingsdialog.ui" line="1286"/>
         <source>It seems that the Games occasionally load ESP or ESM files even if they haven&apos;t been activated as plugins.
 I don&apos;t yet know what the circumstances are, but user reports imply it is in some cases unwanted. If this is checked, ESPs and ESMs not checked in the List are invisible to the game and can not be loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1270"/>
+        <location filename="settingsdialog.ui" line="1290"/>
         <source>Hide inactive ESPs/ESMs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1277"/>
+        <location filename="settingsdialog.ui" line="1297"/>
         <source>Disable this to no longer display mods installed outside MO in the mod list (left pane). Assets from those mods will then be treated as having lowest mod priority together with the original game content.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1280"/>
+        <location filename="settingsdialog.ui" line="1300"/>
         <source>By default Mod Organizer will display esp+bsa bundles installed with foreign tools as mods (left pane). This allows you to control their priority in relation to other mods. This is particularly useful if you also use Steam Workshop to install mods.
 However, if you installed loose file mods outside MO which conflict with BSAs also installed outside MO those conflicts can&apos;t be resolved correctly.
 
@@ -7708,66 +7722,66 @@ If you disable this feature, MO will only display official DLCs this way. Please
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1286"/>
+        <location filename="settingsdialog.ui" line="1306"/>
         <source>Display mods installed outside MO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1296"/>
+        <location filename="settingsdialog.ui" line="1316"/>
         <source>If checked, files (i.e. esps, esms and bsas) belonging to the core game can not be disabled in the UI. (default: on)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1299"/>
+        <location filename="settingsdialog.ui" line="1319"/>
         <source>If checked, files (i.e. esps, esms and bsas) belonging to the core game can not be disabled in the UI. (default: on)
 Uncheck this if you want to use Mod Organizer with total conversions (like Nehrim) but be aware that the game will crash if required files are not enabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1303"/>
+        <location filename="settingsdialog.ui" line="1323"/>
         <source>Force-enable game files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1313"/>
-        <location filename="settingsdialog.ui" line="1316"/>
+        <location filename="settingsdialog.ui" line="1333"/>
+        <location filename="settingsdialog.ui" line="1336"/>
         <source>Disable this to prevent the GUI from being locked when running an executable.  This may result in abnormal behavior.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1319"/>
+        <location filename="settingsdialog.ui" line="1339"/>
         <source>Lock GUI when running executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1329"/>
+        <location filename="settingsdialog.ui" line="1349"/>
         <source>Enable parsing of Archives. This is an Experimental Feature. Has negative effects on performance and known incorrectness.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1332"/>
+        <location filename="settingsdialog.ui" line="1352"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;By default, MO will parse archive files (BSA, BA2) to calculate conflicts between the contents of the archive files and other loose files. This process has a noticeable cost in performance.&lt;/p&gt;&lt;p&gt;This feature should not be confused with the archive management feature offered by MO1. MO2 will only show conflicts with archives and will NOT load them into the game or program.&lt;/p&gt;&lt;p&gt;If you disable this feature, MO will only display conflicts between loose files.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1335"/>
+        <location filename="settingsdialog.ui" line="1355"/>
         <source>Enable parsing of Archives (Experimental Feature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1347"/>
-        <location filename="settingsdialog.ui" line="1351"/>
+        <location filename="settingsdialog.ui" line="1367"/>
+        <location filename="settingsdialog.ui" line="1371"/>
         <source>For Skyrim, this can be used instead of Archive Invalidation. It should make AI redundant for all Profiles.
 For the other games this is not a sufficient replacement for AI!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1355"/>
+        <location filename="settingsdialog.ui" line="1375"/>
         <source>Back-date BSAs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1366"/>
+        <location filename="settingsdialog.ui" line="1386"/>
         <source>Add executables to the blacklist to prevent them from
 accessing the virtual file system. This is useful to prevent
 unintended programs from being hooked. Hooking unintended
@@ -7776,43 +7790,43 @@ programs you are intentionally running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1373"/>
+        <location filename="settingsdialog.ui" line="1393"/>
         <source>Add executables to the blacklist to prevent them from accessing the virtual file system.  This is useful to prevent unintended programs from being hooked.  Hooking unintended programs may affect the execution of these programs or the programs you are intentionally running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1376"/>
+        <location filename="settingsdialog.ui" line="1396"/>
         <source>Configure Executables Blacklist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1386"/>
-        <location filename="settingsdialog.ui" line="1389"/>
+        <location filename="settingsdialog.ui" line="1406"/>
+        <location filename="settingsdialog.ui" line="1409"/>
         <source>Resets the window geometries for all windows.  This can be useful if a window becomes too small or too large, if a column becomes too thin or too wide, and in similar situations.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1392"/>
+        <location filename="settingsdialog.ui" line="1412"/>
         <source>Reset Window Geometries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1412"/>
+        <location filename="settingsdialog.ui" line="1432"/>
         <source>These are workarounds for problems with Mod Organizer. Please make sure you read the help text before changing anything here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1423"/>
+        <location filename="settingsdialog.ui" line="1443"/>
         <source>Diagnostics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1445"/>
+        <location filename="settingsdialog.ui" line="1465"/>
         <source>Hint: right click link and copy link location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1448"/>
+        <location filename="settingsdialog.ui" line="1468"/>
         <source>
                             Logs and crash dumps are stored under your current instance in the &lt;a href=&quot;LOGS_FULL_PATH&quot;&gt;LOGS_DIR&lt;/a&gt;
                             and &lt;a href=&quot;DUMPS_FULL_PATH&quot;&gt;DUMPS_DIR&lt;/a&gt; folders.
@@ -7822,17 +7836,17 @@ programs you are intentionally running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1474"/>
+        <location filename="settingsdialog.ui" line="1494"/>
         <source>Log Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1481"/>
+        <location filename="settingsdialog.ui" line="1501"/>
         <source>Decides the amount of data printed to &quot;ModOrganizer.log&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1484"/>
+        <location filename="settingsdialog.ui" line="1504"/>
         <source>
                                     Decides the amount of data printed to &quot;ModOrganizer.log&quot;.
                                     &quot;Debug&quot; produces very useful information for finding problems. There is usually no noteworthy performance impact but the file may become rather large. If this is a problem you may prefer the &quot;Info&quot; level for regular use. On the &quot;Error&quot; level the log file usually remains empty.
@@ -7840,17 +7854,17 @@ programs you are intentionally running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1494"/>
+        <location filename="settingsdialog.ui" line="1514"/>
         <source>Crash Dumps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1501"/>
+        <location filename="settingsdialog.ui" line="1521"/>
         <source>Decides which type of crash dumps are collected when injected processes crash.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1504"/>
+        <location filename="settingsdialog.ui" line="1524"/>
         <source>
                                     Decides which type of crash dumps are collected when injected processes crash.
                                     &quot;None&quot; Disables the generation of crash dumps by MO.
@@ -7861,17 +7875,17 @@ programs you are intentionally running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1517"/>
+        <location filename="settingsdialog.ui" line="1537"/>
         <source>Max Dumps To Keep</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1524"/>
+        <location filename="settingsdialog.ui" line="1544"/>
         <source>Maximum number of crash dumps to keep on disk. Use 0 for unlimited.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1527"/>
+        <location filename="settingsdialog.ui" line="1547"/>
         <source>
                                     Maximum number of crash dumps to keep on disk. Use 0 for unlimited.
                                     Set &quot;Crash Dumps&quot; above to None to disable crash dump collection.
@@ -7879,7 +7893,7 @@ programs you are intentionally running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="settingsdialog.ui" line="1537"/>
+        <location filename="settingsdialog.ui" line="1557"/>
         <source>LOOT Log Level</source>
         <translation type="unfinished"></translation>
     </message>

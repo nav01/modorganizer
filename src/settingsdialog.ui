@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>586</width>
-    <height>491</height>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -385,6 +385,26 @@
              </size>
             </property>
            </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QGroupBox" name="ModFiles">
+         <property name="title">
+          <string>Mod Files</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_15">
+          <item>
+           <widget class="QCheckBox" name="useRecycleBin">
+            <property name="toolTip">
+             <string>Applies to removing mod installations, deleting downloads, and clearing overwrite folder.
+Does NOT apply to files deleted due to a merge or replaced mods.</string>
+            </property>
+            <property name="text">
+             <string>Use recycle bin for deleted mod installations and downloads</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
